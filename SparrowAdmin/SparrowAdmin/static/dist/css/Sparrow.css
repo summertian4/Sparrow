@@ -1,0 +1,103 @@
+/*!
+ *   Sparrow v1.0.0
+ *   Author: 小鱼周凌宇
+ *	 Website: http://zhoulingyu.com
+ */
+/*
+ * Core: General Layout Style
+ * -------------------------
+ */
+
+h1 {
+  font-size:90px;
+  color:#636363;
+}
+
+h5 {
+  color:#636363;
+}
+
+.error-left {
+  margin-right: 40px;
+  margin-top: 120px;
+  text-align: right;
+}
+
+.error-right {
+  margin-left: 40px;
+  margin-top: 120px;
+}
+
+@font-face {
+  font-family: 'iconfont';  /* project id 531664 */
+  src: url('//at.alicdn.com/t/font_531664_tbfcu0zj7jgfzuxr.eot');
+  src: url('//at.alicdn.com/t/font_531664_tbfcu0zj7jgfzuxr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_531664_tbfcu0zj7jgfzuxr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_531664_tbfcu0zj7jgfzuxr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_531664_tbfcu0zj7jgfzuxr.svg#iconfont') format('svg');
+}
+
+
+ani-div
+{
+position:relative;
+animation-name:come-up;
+animation-duration:2s;
+animation-timing-function:linear;
+animation-delay:0s;
+animation-iteration-count:infinite;
+animation-direction:alternate;
+animation-play-state:running;
+/* Firefox: */
+-moz-animation-name:come-up;
+-moz-animation-duration:2s;
+-moz-animation-timing-function:linear;
+-moz-animation-delay:0s;
+-moz-animation-iteration-count:infinite;
+-moz-animation-direction:alternate;
+-moz-animation-play-state:running;
+/* Safari and Chrome: */
+-webkit-animation-name:come-up;
+-webkit-animation-duration:2s;
+-webkit-animation-timing-function:linear;
+-webkit-animation-delay:0s;
+-webkit-animation-iteration-count:infinite;
+-webkit-animation-direction:alternate;
+-webkit-animation-play-state:running;
+/* Opera: */
+-o-animation-name:come-up;
+-o-animation-duration:2s;
+-o-animation-timing-function:linear;
+-o-animation-delay:0s;
+-o-animation-iteration-count:infinite;
+-o-animation-direction:alternate;
+-o-animation-play-state:running;
+}
+
+@keyframes come-up
+{
+0%   {left:0px; top:0px;}
+50%  {left:0px; top:10px;}
+100% {left:0px; top:0px;}
+}
+
+@-moz-keyframes come-up /* Firefox */
+{
+0%   {left:0px; top:0px;}
+50%  {left:0px; top:10px;}
+100% {left:0px; top:0px;}
+}
+
+@-webkit-keyframes come-up /* Safari and Chrome */
+{
+0%   {left:0px; top:0px;}
+50%  {left:0px; top:50px;}
+100% {left:0px; top:0px;}
+}
+
+@-o-keyframes come-up /* Opera */
+{
+0%   {left:0px; top:0px;}
+50%  {left:0px; top:10px;}
+100% {left:0px; top:0px;}
+}

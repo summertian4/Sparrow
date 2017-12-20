@@ -1,0 +1,9 @@
+brew install httpie
+
+sudo python get-pip.py
+
+brew install python3
+
+pip3 install Django==2.0
+
+python3 manage.py runserver
