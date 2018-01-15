@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
-from DAO.models import Api
-from DAO.dao import ApiDao
+from backend.models import Api
+from backend.dao import ApiDao
 import json
 from django.http import HttpResponseRedirect
 from Sparrow.forms import *

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class DaoConfig(AppConfig):
-    name = 'DAO'
+    name = 'backend'

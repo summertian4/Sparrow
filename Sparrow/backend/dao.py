@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from DAO.models import Api
+from backend.models import Api
 
 class ApiDao:
     def create(model):
