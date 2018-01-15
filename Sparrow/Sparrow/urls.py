@@ -15,21 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
-from DAO.dao import ApiDao
+from django.conf.urls import url
+from django.conf.urls import include
 from Sparrow import action
 from Sparrow.action import ApiAction
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', action.index, name='index'),
-    path('error', action.error),
-    # path('manager/api/list', ApiAction.list),
-    path('manage/api/create', ApiAction.create),
-    path('manage/api/detail/<api_id>', ApiAction.detail),
-    path('manage/api/update/<api_id>', ApiAction.update),
-    path('manage/api/delete/<api_id>', ApiAction.delete),
-    path('api/<path>', action.dispatch),
-
-
+    # path('', action.index, name='index'),
+    # path('error', action.error),
+    # # path('manager/api/list', ApiAction.list),
+    # path('manage/api/create', ApiAction.create),
+    # path('manage/api/detail/<api_id>', ApiAction.detail),
+    # path('manage/api/update/<api_id>', ApiAction.update),
+    # path('manage/api/delete/<api_id>', ApiAction.delete),
+    # path('api/<path>', action.dispatch),
+    # url(r'^api/', include('Sparrow.urls', namespace='api')),
+    url(r'^$', TemplateView.as_view(template_name="index.html")),
 ]
