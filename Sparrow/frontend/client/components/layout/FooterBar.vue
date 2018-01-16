@@ -10,7 +10,7 @@
           </a>
           <a href="https://twitter.com/_fundon">
             <span class="icon">
-              <i class="fa fa-twitter"></i>
+              <i class="fa fa-weibo"></i>
             </span>
           </a>
         </p>
@@ -36,11 +36,11 @@ export default {
 
 .footer {
   margin-left: 180px;
-  
+
   @include mobile() {
     margin-left: 0;
   }
-  
+
   .social a {
     border-bottom: none !important;
   }

@@ -21,6 +21,33 @@ const state = {
       component: lazyLoading('dashboard', true)
     },
     {
+      name: '项目',
+      path: '/project',
+      meta: {
+        icon: 'fa-list-ul',
+        link: 'project/index.vue'
+      },
+      component: lazyLoading('project', true)
+    },
+    {
+      name: '模板',
+      path: '/template',
+      meta: {
+        icon: 'fa-copy',
+        link: 'template/index.vue'
+      },
+      component: lazyLoading('template', true)
+    },
+    {
+      name: '收藏',
+      path: '/favorite',
+      meta: {
+        icon: 'fa-heart-o',
+        link: 'favorite/index.vue'
+      },
+      component: lazyLoading('favorite', true)
+    },
+    {
       name: 'Axios',
       path: '/axiosDemo',
       meta: {

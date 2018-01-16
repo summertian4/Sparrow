@@ -46,7 +46,7 @@ export default {
   computed: {
     codelink () {
       if (this.$route.meta && this.$route.meta.link) {
-        return 'https://github.com/vue-bulma/vue-admin/blob/master/client/views/' + this.$route.meta.link
+        return 'https://github.com/summertian4/Sparrow' + this.$route.meta.link
       } else {
         return null
       }
