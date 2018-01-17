@@ -1,48 +1,19 @@
 <template>
   <div>
     <div class="tile is-ancestor">
-
-      <router-link class="tile is-parent is-3" to="favorite">
+      <router-link class="tile is-parent is-3" to="project/api/list" v-for="project in projects" :key="index">
         <article class="tile is-child box">
-          <h4 class="title">Porject Name</h4>
-          描述
-          创建时间
-          <a class="button is-primary">
-            More
-          </a>
+          <h4 class="title">{{ project.name }}</h4>
+          {{ project.note }}
         </article>
       </router-link>
-
-
-      <div class="tile is-parent is-3">
-        <article class="tile is-child box">
-          <h4 class="title">Porject Name</h4>
-          <table class="table is-narrow">
-            <thead>
-            <tr>
-              <th>One</th>
-              <th>Two</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>Three</td>
-              <td>Four</td>
-            </tr>
-            <tr>
-              <td>Five</td>
-              <td>Six</td>
-            </tr>
-            </tbody>
-          </table>
-        </article>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
   import Chart from 'vue-bulma-chartjs'
+  import axios from 'axios'
 
   export default {
     components: {
@@ -50,12 +21,28 @@
     },
 
     data () {
-      return {}
+      return {
+        projects: ''
+      }
+    },
+
+    created () {
+      this.loadProjects()
     },
 
     computed: {},
 
-    methods: {}
+    methods: {
+      loadProjects () {
+        axios.get('/DataApis/data/project/list')
+          .then((res) => {
+            this.projects = res.data['projects']
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
+    }
   }
 </script>
 

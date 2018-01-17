@@ -14,6 +14,11 @@ export default new Router({
       component: require('../views/Home')
     },
     {
+      name: 'API',
+      path: '/project/api/list',
+      component: require('../views/api/index')
+    },
+    {
       name: 'Login',
       path: '/login',
       component: require('../views/auth/Login')

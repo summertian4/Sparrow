@@ -12,6 +12,7 @@ import { TOGGLE_SIDEBAR } from 'vuex-store/mutation-types'
 
 Vue.router = router
 Vue.use(VueAxios, axios)
+window.axios = axios
 Vue.use(VueAuth, {
   auth: {
     request: function (req, token) {
