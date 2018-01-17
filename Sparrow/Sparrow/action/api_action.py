@@ -1,49 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
-from backend.models import Api
-from backend.dao import ApiDao
+from backend.dao.api_dao import ApiDao
 import json
 from django.http import HttpResponseRedirect
 from Sparrow.forms import *
 import Sparrow._const
 from django.http import QueryDict
-import ast
-from django.views.decorators.csrf import csrf_exempt
-
-
-def index(request):
-    context = {}
-    apis = ApiDao.get_all_api_list()
-    context['apis'] = apis
-    return render(request, 'index.html', context)
-
-def error(request):
-    context = {}
-    errorMessage = "出错了"
-    print(request.method)
-    if Sparrow._const.kError in request.POST:
-        errorMessage = request.POST[Sparrow._const.kError]
-    if Sparrow._const.kError in request.GET:
-        errorMessage = request.GET[Sparrow._const.kError]
-    context["errorMessage"] = errorMessage
-
-    return render(request, 'error.html', context)
-
-@csrf_exempt
-def dispatch(request, path):
-    response_data = {}
-
-
-    try:
-        api = ApiDao.get_api(path, request.method)
-    except:
-        request.POST = QueryDict(Sparrow._const.kError + "=" + "API:" + path + " 不存在")
-        return error(request)
-
-
-    json_dic = ast.literal_eval(api.responseJson)
-    return HttpResponse(json.dumps(json_dic), content_type="application/json")
-
 
 class ApiAction:
     def list(request):
@@ -135,3 +97,4 @@ class ApiAction:
             request.method = Api.Method.POST.value
             request.POST = QueryDict(Sparrow._const.kError + "=" + "删除 API 失败")
             return error(request)
+

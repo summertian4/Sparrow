@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-from django.shortcuts import render
 from backend.models import Api
 
 class ApiDao:

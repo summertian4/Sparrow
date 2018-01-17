@@ -23,12 +23,15 @@ module.exports = {
     port: process.env.DEV_PORT || 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'assets',
-    assetsPublicPath: '/static/',
+    assetsPublicPath: '/',
     proxyTable: {
-        '/MODApis': {
-            target: 'http://dev.markitondemand.com',
-            changeOrigin: true
+      '/DataApis': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/DataApis': ''
         }
+      }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
