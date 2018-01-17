@@ -3,7 +3,7 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <h4 class="title">API</h4>
+          <h4 class="title">{{ project.name }} {{ project.apis }}</h4>
           <table class="table">
             <thead>
             <tr>
@@ -22,6 +22,20 @@
             </tr>
             </tfoot>
             <tbody>
+            <tr v-for="api in project.apis" :key="index">
+              <td>
+                <a class="button green is-active">{{ api.method }}</a>
+              </td>
+              <td>login</td>
+              <td class="is-icon">
+                登录
+              </td>
+              <td class="is-icon">
+                <a href="#">
+                  <i class="fa fa-edit"></i>
+                </a>
+              </td>
+            </tr>
             <tr>
               <td>
                 <a class="button green is-active">POST</a>
@@ -97,7 +111,7 @@
 
     data () {
       return {
-        projects: ''
+        project: ''
       }
     },
 
@@ -109,9 +123,9 @@
 
     methods: {
       loadProjects () {
-        axios.get('/DataApis/data/project/list')
+        axios.get('/DataApis/data/project/detail/' + this.$route.params.id)
           .then((res) => {
-            this.projects = res.data['projects']
+            this.project = res.data['project']
           })
           .catch(function (error) {
             console.log(error)

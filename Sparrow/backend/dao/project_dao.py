@@ -1,4 +1,5 @@
 from backend.models import Project
+from backend.models import Api
 
 class ProjectDao:
     def get_all_projects():
@@ -11,3 +12,7 @@ class ProjectDao:
                                                'note',
                                                'status'))
         return prjects
+
+    def get_project_with_id(project_id):
+        project = Project.objects.get(project_id=project_id)
+        return project

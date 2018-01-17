@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/<path>', action.common_action.dispatch),
 
     path('data/project/list', ProjectAction.list),
+    path('data/project/detail/<project_id>', ProjectAction.detail),
     # url(r'^api/', include('Sparrow.urls', namespace='api')),
     # url(r'^$', TemplateView.as_view(template_name="index.html")),
 ]

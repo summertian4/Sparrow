@@ -15,7 +15,7 @@ export default new Router({
     },
     {
       name: 'API',
-      path: '/project/api/list',
+      path: '/project/detail/:id',
       component: require('../views/api/index')
     },
     {
