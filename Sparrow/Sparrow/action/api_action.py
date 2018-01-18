@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from Sparrow.forms import *
 import Sparrow._const
 from django.http import QueryDict
+from django.views.decorators.csrf import csrf_exempt
+
 
 class ApiAction:
     def list(request):
@@ -15,7 +17,10 @@ class ApiAction:
         response_data['method'] = Api.Method.GET.value
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    @csrf_exempt
     def create(request):
+        response_data = {}
+        print(request.POST)
         if request.method == Api.Method.POST.value:
             form = ApiCreateForm(data=request.POST)
             print(form)
@@ -30,21 +35,21 @@ class ApiAction:
                 model.responseJson = form.clean().get('responseJson')
                 api = ApiDao.create(model)
                 if api is None:
-                    # 返回到失败页面
-                    request.method = Api.Method.POST.value
-                    request.POST = QueryDict(Sparrow._const.kError + "=" + "创建 API 失败")
-                    return error(request)
+                    response_data["code"] = 200
+                    response_data["message"] = "API create faild"
+                    return HttpResponse(json.dumps(response_data), content_type="application/json")
                 else:
-                    # 返回到详情页面
-                    return HttpResponseRedirect("/manage/api/detail/" + str(api.api_id))
+                    response_data["code"] = 200
+                    response_data["message"] = "success"
+                    return HttpResponse(json.dumps(response_data), content_type="application/json")
             else:
-                # 返回到失败页面
-                request.method = Api.Method.POST.value
-                request.POST = QueryDict(Sparrow._const.kError + "=" + "创建 API 失败")
-                return error(request)
-        if request.method == Api.Method.GET.value:
-            context = {}
-            return render(request, 'api/create.html', context)
+                response_data["code"] = 200
+                response_data["message"] = "form parse faild"
+                return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            response_data["code"] = 200
+            response_data["message"] = "GET is invalid"
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     def detail(request, api_id):
         context = {}
@@ -97,4 +102,3 @@ class ApiAction:
             request.method = Api.Method.POST.value
             request.POST = QueryDict(Sparrow._const.kError + "=" + "删除 API 失败")
             return error(request)
-

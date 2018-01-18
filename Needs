@@ -8,6 +8,6 @@ pip3 install Django==2.0
 
 python3 manage.py runserver
 
-pip install django-cors-headers
+pip3 install django-cors-headers
 
 npm install -s vue-resource

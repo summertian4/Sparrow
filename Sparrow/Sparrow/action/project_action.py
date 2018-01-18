@@ -5,7 +5,6 @@ from backend.dao.project_dao import ProjectDao
 from backend.models import Dictable
 from django.core import serializers
 
-
 class ProjectAction:
     def list(request):
         response_data = {}

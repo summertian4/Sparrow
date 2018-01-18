@@ -9,10 +9,16 @@ import router from './router'
 import store from './store'
 import * as filters from './filters'
 import { TOGGLE_SIDEBAR } from 'vuex-store/mutation-types'
+import VueCookie from 'vue-cookie'
 
 Vue.router = router
+
+axios.defaults.withCredentials = true
 Vue.use(VueAxios, axios)
 window.axios = axios
+
+Vue.use(VueCookie)
+
 Vue.use(VueAuth, {
   auth: {
     request: function (req, token) {

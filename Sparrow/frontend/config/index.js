@@ -16,7 +16,7 @@ module.exports = {
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
     productionGzip: false,
-    productionGzipExtensions: ['js', 'css']
+    productionGzipExtensions: ['js', 'css'],
   },
   dev: {
     env: require('./dev.env'),
@@ -25,11 +25,11 @@ module.exports = {
     assetsSubDirectory: 'assets',
     assetsPublicPath: '/',
     proxyTable: {
-      '/DataApis': {
+      '/frontend': {
         target: 'http://localhost:8000',
         changeOrigin: true,
         pathRewrite: {
-          '^/DataApis': ''
+          '^/frontend': 'frontend'
         }
       }
     },

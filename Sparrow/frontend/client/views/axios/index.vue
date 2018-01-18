@@ -16,7 +16,7 @@
         <article class="tile is-child box">
           <div class="block">
             <p class="title is-5">Request Params</p>
-            <a href="https://github.com/markitondemand/DataApis" class="link">Markit On Demand - Market Data APIs</a>
+            <a href="https://github.com/markitondemand" class="link">Markit On Demand - Market Data APIs</a>
           </div>
           <div class="block">
             <div class="control is-horizontal">

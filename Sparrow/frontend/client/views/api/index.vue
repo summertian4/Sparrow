@@ -107,7 +107,7 @@
 
     methods: {
       loadProjects () {
-        axios.get('/DataApis/data/project/detail/' + this.$route.params.id)
+        axios.get('/frontend/project/detail/' + this.$route.params.id)
           .then((res) => {
             this.project = res.data['project']
           })

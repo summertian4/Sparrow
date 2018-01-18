@@ -35,7 +35,7 @@
 
     methods: {
       loadProjects () {
-        axios.get('/DataApis/data/project/list')
+        axios.get('/frontend/project/list')
           .then((res) => {
             this.projects = res.data['projects']
           })

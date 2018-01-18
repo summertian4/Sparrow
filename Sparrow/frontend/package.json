@@ -40,7 +40,7 @@
     "bulma": "^0.3.2",
     "font-awesome": "4.7.0",
     "mdi": "^1.8.36",
-    "plotly.js": "^1.24.2",
+    "plotly.js": "^1.33.0",
     "vue": "^2.2.2",
     "vue-axios": "^2.0.1",
     "vue-bulma-brace": "^0.1.0",
@@ -117,6 +117,7 @@
     "webpack": "^2.2.1",
     "webpack-dev-middleware": "^1.9.0",
     "webpack-hot-middleware": "^2.14.0",
-    "webpack-merge": "^4.0.0"
+    "webpack-merge": "^4.0.0",
+    "vue-cookie": "^1.1.4"
   }
 }
