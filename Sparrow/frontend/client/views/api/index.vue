@@ -1,15 +1,20 @@
 <template>
   <div>
     <div class="tile is-ancestor">
+
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <h4 class="title">{{ project.name }} {{ project.apis }}</h4>
+          <h4 class="title">{{ project.name }} </h4>
+          <router-link class="right" :to="{ path: '/api/create'}">
+            <button class="button is-primary">添加</button>
+          </router-link>
           <table class="table">
             <thead>
             <tr>
               <th>请求类型</th>
               <th>请求名称</th>
               <th>请求 URL</th>
+              <th>状态</th>
               <th>操作</th>
             </tr>
             </thead>
@@ -18,78 +23,57 @@
               <th>请求类型</th>
               <th>请求名称</th>
               <th>请求 URL</th>
+              <th>状态</th>
               <th>操作</th>
             </tr>
             </tfoot>
             <tbody>
             <tr v-for="api in project.apis" :key="index">
               <td>
-                <a class="button green is-active">{{ api.method }}</a>
+                <div v-if="api.method == 'GET'">
+                  <div class="button green is-active">
+                    {{ api.method }}
+                  </div>
+                </div>
+                <div v-else-if="api.method == 'POST'">
+                  <div class="button blue is-active">
+                    {{ api.method }}
+                  </div>
+                </div>
+                <div v-else-if="api.method == 'PUT'">
+                  <div class="button yellow is-active">
+                    {{ api.method }}
+                  </div>
+                </div>
+                <div v-else-if="api.method == 'DELETE'">
+                  <div class="button red is-active">
+                    {{ api.method }}
+                  </div>
+                </div>
               </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
+              <td>{{ api.name }}</td>
               <td>
-                <a class="button green is-active">POST</a>
+                {{ api.path }}
               </td>
-              <td>login</td>
+              <td>{{ api.status }}</td>
               <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a class="button blue is-active">GET</a>
-              </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a class="button yellow is-active">PUT</a>
-              </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a class="button red is-active">DELETE</a>
-              </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
+                <p class="control has-addons">
+                  <a class="button">
+                    <span class="icon is-small">
+                      <i class="fa fa-pencil"></i>
+                    </span>
+                  </a>
+                  <a class="button">
+                    <span class="icon is-small">
+                      <i class="fa fa-eye"></i>
+                    </span>
+                  </a>
+                  <a class="button">
+                    <span class="icon is-small">
+                      <i class="fa fa-trash"></i>
+                    </span>
+                  </a>
+                </p>
               </td>
             </tr>
             </tbody>
@@ -162,5 +146,9 @@
     background-color: #eb4c64;
     border-color: transparent;
     color: #fff;
+  }
+
+  .right {
+    float: right;
   }
 </style>

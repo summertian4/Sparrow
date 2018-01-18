@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tile is-ancestor">
-      <router-link class="tile is-parent is-3" to="project/detail/0" v-for="project in projects" :key="index">
+      <router-link class="tile is-parent is-3" :to="{ path: 'detail/'+project.project_id}" append v-for="project in projects" :key="index">
         <article class="tile is-child box">
           <h4 class="title">{{ project.name }}</h4>
           {{ project.note }}
@@ -22,6 +22,7 @@
 
     data () {
       return {
+        hello: 'hello',
         projects: ''
       }
     },
