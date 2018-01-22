@@ -5,6 +5,11 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 import json
 
+class CommonData(object):
+    def response_data(code, message):
+        dic = {'code': code, 'message': message}
+        return dic
+
 def index(request):
     context = {}
     apis = ApiDao.get_all_api_list()

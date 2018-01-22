@@ -7,7 +7,13 @@ from Sparrow.forms import *
 import Sparrow._const
 from django.http import QueryDict
 from django.views.decorators.csrf import csrf_exempt
+from enum import Enum, unique
+from Sparrow.action.common_action import CommonData
 
+FormParseError = 1001
+DaoOperationError = 1002
+RequetMethodError = 1003
+Success = 200
 
 class ApiAction:
     def list(request):
@@ -19,11 +25,8 @@ class ApiAction:
 
     @csrf_exempt
     def create(request):
-        response_data = {}
-        print(request.POST)
         if request.method == Api.Method.POST.value:
             form = ApiCreateForm(data=request.POST)
-            print(form)
             # check whether it's valid:
             if form.is_valid():
                 model = Api()
@@ -35,21 +38,17 @@ class ApiAction:
                 model.responseJson = form.clean().get('responseJson')
                 api = ApiDao.create(model)
                 if api is None:
-                    response_data["code"] = 200
-                    response_data["message"] = "API create faild"
-                    return HttpResponse(json.dumps(response_data), content_type="application/json")
+                    data = CommonData.response_data(DaoOperationError, "API create faild")
+                    return HttpResponse(json.dumps(data), content_type="application/json")
                 else:
-                    response_data["code"] = 200
-                    response_data["message"] = "success"
-                    return HttpResponse(json.dumps(response_data), content_type="application/json")
+                    data = CommonData.response_data(Success, "sucsses")
+                    return HttpResponse(json.dumps(data), content_type="application/json")
             else:
-                response_data["code"] = 200
-                response_data["message"] = "form parse faild"
-                return HttpResponse(json.dumps(response_data), content_type="application/json")
+                data = CommonData.response_data(FormParseError, "form parse faild")
+                return HttpResponse(json.dumps(data), content_type="application/json")
         else:
-            response_data["code"] = 200
-            response_data["message"] = "GET is invalid"
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
+            data = CommonData.response_data(RequetMethodError, "GET is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
 
     def detail(request, api_id):
         context = {}
