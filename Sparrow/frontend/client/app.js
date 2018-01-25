@@ -15,7 +15,6 @@ Vue.router = router
 
 axios.defaults.withCredentials = true
 Vue.use(VueAxios, axios)
-window.axios = axios
 
 Vue.use(VueCookie)
 

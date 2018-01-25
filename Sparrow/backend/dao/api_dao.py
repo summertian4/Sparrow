@@ -29,8 +29,11 @@ class ApiDao:
         return api
 
     def get_api(path, method):
-        api = Api.objects.get(path=path, method=method)
-        return api
+        try:
+            api = Api.objects.get(path=path, method=method)
+            return api
+        except:
+            return None
 
     def delete(api_id):
         deleted_count, _ = Api.objects.filter(api_id=api_id).delete()

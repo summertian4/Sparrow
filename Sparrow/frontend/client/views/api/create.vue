@@ -6,8 +6,13 @@
           <h1 class="title">添加 API</h1>
           <div class="block">
             <label class="label">请求路径</label>
-            <p class="control">
-              <input class="input" type="text" placeholder="输入您的 API 相对路径" v-model.trim="api.path">
+            <p class="control has-icon has-icon-right">
+              <input v-bind:class="{ 'is-danger': !verification.path }" class="input" type="text"
+                     placeholder="输入您的 API 相对路径" v-model.trim="api.path">
+              <span class="icon is-small" v-if="!verification.path">
+               <i class="fa fa-warning"></i>
+              </span>
+              <span class="help is-danger" v-if="!verification.path">{{ errorMessage.path }}</span>
             </p>
             <label class="label">请求类型</label>
             <p class="control">
@@ -22,11 +27,12 @@
             </p>
             <label class="label">请求名称</label>
             <p class="control has-icon has-icon-right">
-              <input class="input is-success" type="text" placeholder="请求名称可以方便您快速找到 API" v-model="api.name">
-              <span class="icon is-small">
-                <i class="fa fa-check"></i>
+              <input v-bind:class="{ 'is-danger': !verification.name }" class="input" type="text"
+                     placeholder="请求名称可以方便您快速找到 API" v-model="api.name">
+              <span class="icon is-small" v-if="!verification.name">
+               <i class="fa fa-warning"></i>
               </span>
-              <span class="help is-success">This username is available</span>
+              <span class="help is-danger" v-if="!verification.name">{{ errorMessage.name }}</span>
             </p>
             <label class="label">是否启用</label>
             <p class="control">
@@ -37,14 +43,6 @@
                 </select>
               </span>
             </p>
-            <!--<label class="label">Email</label>-->
-            <!--<p class="control has-icon has-icon-right">-->
-            <!--<input class="input is-danger" type="text" placeholder="Email input" value="hello@">-->
-            <!--<span class="icon is-small">-->
-            <!--<i class="fa fa-warning"></i>-->
-            <!--</span>-->
-            <!--<span class="help is-danger">This email is invalid</span>-->
-            <!--</p>-->
 
             <label class="label">备注</label>
             <p class="control">
@@ -57,8 +55,13 @@
             </p>
 
             <label class="label">返回数据</label>
-            <p class="control">
-              <textarea class="textarea" placeholder="" v-model.trim="api.responseJson"></textarea>
+            <p class="control  has-icon has-icon-right">
+              <textarea v-bind:class="{ 'is-danger': !verification.responseJson }" class="textarea" placeholder=""
+                        v-model.trim="api.responseJson"></textarea>
+              <span class="icon is-small" v-if="!verification.responseJson">
+               <i class="fa fa-warning"></i>
+              </span>
+              <span class="help is-danger" v-if="!verification.responseJson">{{ errorMessage.responseJson }}</span>
             </p>
 
             <p class="control">
@@ -73,14 +76,11 @@
 </template>
 
 <script>
-  import Chart from 'vue-bulma-chartjs'
   import axios from 'axios'
   import qs from 'qs'
 
   export default {
-    components: {
-      Chart
-    },
+    components: {},
 
     data () {
       return {
@@ -90,8 +90,17 @@
           name: '',
           status: 1,
           note: '',
-          responseJson: '',
-          csrfmiddlewaretoken: this.$cookie.get('csrftoken')
+          responseJson: ''
+        },
+        verification: {
+          path: true,
+          name: true,
+          responseJson: true
+        },
+        errorMessage: {
+          path: '',
+          name: '',
+          responseJson: ''
         }
       }
     },
@@ -102,16 +111,59 @@
     computed: {},
 
     methods: {
-      submit () {
-        var formData = qs.stringify(this.api)
+      isEmpty (obj) {
+        if (obj.length === 0 || obj.length === '' || obj === null) {
+          return true
+        } else {
+          return false
+        }
+      },
+      verify (func) {
+        // 校验空串
+        for (var prop in this.api) {
+          if (this.isEmpty(this.api[prop])) {
+            this.verification[prop] = false
+            this.errorMessage[prop] = '不能为空'
+            func(false)
+            return
+          }
+        }
+        // name 校验
         axios({
-          method: 'post',
-          url: '/frontend/api/create',
-          data: formData
-        }).then(function (res) {
-          console.log(res)
+          method: 'get',
+          url: '/frontend/api/search',
+          params: {
+            path: this.api.path,
+            method: this.api.method
+          }
+        }).then((res) => {
+          var exist = res.data['exist']
+          console.log('api is exist')
+          func(!exist)
         }).catch(function (error) {
           console.log(error)
+        })
+      },
+      submit () {
+        this.verify(function (ok) {
+          if (ok) {
+            var formData = qs.stringify(this.api)
+            axios({
+              method: 'post',
+              url: '/frontend/api/create',
+              data: formData
+            }).then(function (res) {
+              var code = res.data['code']
+              if (code === 200) {
+                console.log('创建成功')
+              }
+              console.log(code)
+            }).catch(function (error) {
+              console.log(error)
+            })
+          } else {
+            console.log('验证未通过')
+          }
         })
       }
     }

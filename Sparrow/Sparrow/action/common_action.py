@@ -4,11 +4,17 @@ import Sparrow._const
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 import json
+from enum import Enum, unique
 
 class CommonData(object):
     def response_data(code, message):
         dic = {'code': code, 'message': message}
         return dic
+
+    @unique
+    class Method(Enum):
+        GET = "GET"
+        POST = "POST"
 
 def index(request):
     context = {}

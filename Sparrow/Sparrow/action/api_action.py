@@ -7,8 +7,8 @@ from Sparrow.forms import *
 import Sparrow._const
 from django.http import QueryDict
 from django.views.decorators.csrf import csrf_exempt
-from enum import Enum, unique
 from Sparrow.action.common_action import CommonData
+from backend.models import Api
 
 FormParseError = 1001
 DaoOperationError = 1002
@@ -20,12 +20,12 @@ class ApiAction:
         response_data = {}
         apis_list = ApiDao.get_all_api_list()
         response_data['apis'] = apis_list
-        response_data['method'] = Api.Method.GET.value
+        response_data['method'] = CommonData.Method.GET.value
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     @csrf_exempt
     def create(request):
-        if request.method == Api.Method.POST.value:
+        if request.method == CommonData.Method.POST.value:
             form = ApiCreateForm(data=request.POST)
             # check whether it's valid:
             if form.is_valid():
@@ -48,6 +48,22 @@ class ApiAction:
                 return HttpResponse(json.dumps(data), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "GET is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def search(request):
+        if request.method == 'GET':
+            path = request.GET['path']
+            method = request.GET['method']
+            api = ApiDao.get_api(path, method)
+            data = CommonData.response_data(Success, "Success")
+            if api is None:
+                data['exist'] = False
+            else:
+                data['api'] = api.as_dict()
+                data['exist'] = True
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            data = CommonData.response_data(RequetMethodError, "POST is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
 
     def detail(request, api_id):

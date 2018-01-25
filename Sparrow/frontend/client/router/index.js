@@ -14,6 +14,11 @@ export default new Router({
       component: require('../views/Home')
     },
     {
+      name: '项目 / 添加',
+      path: '/project/create',
+      component: require('../views/project/create')
+    },
+    {
       name: '项目 / API',
       path: '/project/detail/:id',
       component: require('../views/api/index')
