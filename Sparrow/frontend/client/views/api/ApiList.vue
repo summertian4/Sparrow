@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div id="ApiList">
     <div class="tile is-ancestor">
-
       <div class="tile is-parent">
         <article class="tile is-child box">
           <h4 class="title">{{ project.name }} </h4>
@@ -85,14 +84,9 @@
 </template>
 
 <script>
-  import Chart from 'vue-bulma-chartjs'
   import axios from 'axios'
 
   export default {
-    components: {
-      Chart
-    },
-
     data () {
       return {
         project: ''
