@@ -14,7 +14,8 @@
             </span>
           </a>
         </p>
-        <p><span class="icon"><i class="fa fa-code"></i></span> with <span class="icon"><i class="fa fa-heart"></i></span> by <a href="https://github.com/fundon">fundon</a>.</p>
+        <p><span class="icon"><i class="fa fa-code"></i></span> with <span class="icon"><i class="fa fa-heart"></i></span> by <a href="https://github.com/summertian4">小鱼周凌宇</a>.</p>
+        <p>由 <a href="https://github.com/vue-bulma/vue-admin">Vue Admin</a> 强力驱动</p>
         <p>Code licensed under <a :href="'https://github.com/' + repository + '/blob/master/LICENSE'">{{ license }}</a>.</p>
       </div>
     </div>
