@@ -84,32 +84,22 @@
 </template>
 
 <script>
-  import axios from 'axios'
 
   export default {
     data () {
-      return {
-        project: ''
-      }
+      return {}
+    },
+
+    props: {
+      project: ''
     },
 
     created () {
-      this.loadProjects()
     },
 
     computed: {},
 
-    methods: {
-      loadProjects () {
-        axios.get('/frontend/project/detail/' + this.$route.params.id)
-          .then((res) => {
-            this.project = res.data['project']
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-      }
-    }
+    methods: {}
   }
 </script>
 

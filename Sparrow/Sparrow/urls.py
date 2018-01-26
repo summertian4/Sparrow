@@ -36,6 +36,7 @@ urlpatterns = [
     path('frontend/project/list', ProjectAction.list),
     path('frontend/project/detail/<project_id>', ProjectAction.detail),
     path('frontend/project/create', ProjectAction.create),
+    path('frontend/project/update/<api_id>', ProjectAction.update),
     path('frontend/project/search', ProjectAction.search),
     path('frontend/api/create', ApiAction.create),
     path('frontend/api/search', ApiAction.search),

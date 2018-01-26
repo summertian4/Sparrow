@@ -3,12 +3,11 @@
     <article class="tile is-child box">
       <tabs animation="slide" :only-fade="false">
         <tab-pane label="API 列表" selected>
-          <api-list></api-list>
+          <api-list :project="project"></api-list>
         </tab-pane>
         <tab-pane label="项目设置">
-          <project-setting></project-setting>
+          <project-setting :project="project"></project-setting>
         </tab-pane>
-        <tab-pane label="扫码登录">扫码登录</tab-pane>
       </tabs>
     </article>
   </div>
@@ -18,6 +17,7 @@
   import ProjectSetting from './ProjectSetting'
   import ApiList from '../api/ApiList'
   import {Tabs, TabPane} from 'vue-bulma-tabs'
+  import axios from 'axios'
 
   export default {
     components: {
@@ -34,11 +34,22 @@
     },
 
     created () {
+      this.loadProjects()
     },
 
     computed: {},
 
-    methods: {}
+    methods: {
+      loadProjects () {
+        axios.get('/frontend/project/detail/' + this.$route.params.id)
+          .then((res) => {
+            this.project = res.data['project']
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
+    }
   }
 </script>
 
