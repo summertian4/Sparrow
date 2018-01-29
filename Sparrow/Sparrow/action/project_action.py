@@ -42,6 +42,7 @@ class ProjectAction:
                     return HttpResponse(json.dumps(data), content_type="application/json")
                 else:
                     data = CommonData.response_data(Success, "sucsses")
+                    data['project'] = model_to_dict(project)
                     return HttpResponse(json.dumps(data), content_type="application/json")
             else:
                 data = CommonData.response_data(FormParseError, "form parse faild")
@@ -80,10 +81,17 @@ class ProjectAction:
             project = ProjectDao.get_project_with_Name(name)
             data = CommonData.response_data(Success, "Success")
             if project is None:
-                data['exist'] = False
+                data['repeatability'] = False
             else:
                 data['api'] = project.as_dict()
-                data['exist'] = True
+                if 'project_id' in request.GET.keys():
+                    project_id = request.GET['project_id']
+                    if str(project.project_id) == str(project_id):
+                        data['repeatability'] = False
+                    else:
+                        data['repeatability'] = True
+                else:
+                    data['repeatability'] = True
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "POST is invalid")

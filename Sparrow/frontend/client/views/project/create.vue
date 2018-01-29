@@ -109,12 +109,12 @@
             name: this.project.name
           }
         }).then((res) => {
-          var exist = res.data['exist']
-          if (exist) {
+          var repeatability = res.data['repeatability']
+          if (repeatability) {
             this.verification.name = false
             this.errorMessage.name = '该名称的项目已经存在'
           }
-          callback(!exist)
+          callback(!repeatability)
         }).catch(function (error) {
           console.log(error)
         })
@@ -131,7 +131,8 @@
             }).then((res) => {
               var code = res.data['code']
               if (code === 200) {
-                console.log('创建成功')
+                var model = res.data['project']
+                this.$router.push({ path: '/project/detail/' + model.project_id })
               } else {
                 this.errorMessage.modal = res.data['message']
                 this.showModal = true

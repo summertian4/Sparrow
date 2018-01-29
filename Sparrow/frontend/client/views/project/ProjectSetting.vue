@@ -76,17 +76,16 @@
     },
 
     props: {
-      project: ''
+      project: {
+        name: '',
+        status: 1,
+        note: ''
+      }
     },
 
     data () {
       return {
         showModal: false,
-        project: {
-          name: '',
-          status: 1,
-          note: ''
-        },
         newData: {
           name: '',
           status: 1,
@@ -134,15 +133,16 @@
           method: 'get',
           url: '/frontend/project/search',
           params: {
-            name: this.project.name
+            name: this.project.name,
+            project_id: this.$route.params.id
           }
         }).then((res) => {
-          var exist = res.data['exist']
-          if (exist) {
+          var repeatability = res.data['repeatability']
+          if (repeatability) {
             this.verification.name = false
             this.errorMessage.name = '该名称的项目已经存在'
           }
-          callback(!exist)
+          callback(!repeatability)
         }).catch(function (error) {
           console.log(error)
         })
