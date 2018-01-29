@@ -38,6 +38,7 @@ urlpatterns = [
     path('frontend/project/create', ProjectAction.create),
     path('frontend/project/update/<api_id>', ProjectAction.update),
     path('frontend/project/search', ProjectAction.search),
+    path('frontend/project/delete', ProjectAction.delete),
     path('frontend/api/create', ApiAction.create),
     path('frontend/api/search', ApiAction.search),
     # url(r'^api/', include('Sparrow.urls', namespace='api')),

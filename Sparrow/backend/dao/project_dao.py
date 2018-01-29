@@ -41,3 +41,11 @@ class ProjectDao:
             return True
         else:
             return False
+
+    def delete(project_id):
+        deleted_count, _ = Project.objects.filter(project_id=project_id).delete()
+        print("delete count: " + str(deleted_count))
+        if deleted_count > 0:
+            return True
+        else:
+            return False

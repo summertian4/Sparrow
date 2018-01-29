@@ -10,6 +10,7 @@ from backend.models import Project
 FormParseError = 1001
 DaoOperationError = 1002
 RequetMethodError = 1003
+RequetParamsError = 1003
 Success = 200
 
 
@@ -95,4 +96,21 @@ class ProjectAction:
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "POST is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def delete(request):
+        if request.method == 'GET':
+            project_id = request.GET['project_id']
+            if project_id is None:
+                data = CommonData.response_data(RequetParamsError, "project_id is None")
+                return HttpResponse(json.dumps(data), content_type="application/json")
+            succesed = ProjectDao.delete(project_id)
+            if succesed:
+                data = CommonData.response_data(Success, "Success")
+                return HttpResponse(json.dumps(data), content_type="application/json")
+            else:
+                data = CommonData.response_data(DaoOperationError, "Delete Failed")
+                return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            data = CommonData.response_data(RequetMethodError, "GET is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
