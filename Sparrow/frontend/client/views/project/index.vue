@@ -6,12 +6,33 @@
       </router-link>
     </div>
 
-    <div class="tile is-ancestor">
-      <router-link class="tile is-parent is-3" :to="{ path: 'detail/'+project.project_id}" append
-                   v-for="project in projects" :key="project.project_id">
+    <div class="tile is-ancestor" v-for="(project, index) in projects" v-if="index % 4 === 0">
+      <router-link class="tile is-parent is-3" :to="{ path: 'detail/'+projects[index].project_id}" append
+                   v-if="index < projects.length">
         <article class="tile is-child box">
-          <h4 class="title">{{ project.name }}</h4>
-          {{ project.note }}
+          <h4 class="title">{{ projects[index].name }}</h4>
+          <div class="note">{{ projects[index].note }}</div>
+        </article>
+      </router-link>
+      <router-link class="tile is-parent is-3" :to="{ path: 'detail/'+projects[index + 1].project_id}" append
+                   v-if="index + 1 < projects.length">
+        <article class="tile is-child box">
+          <h4 class="title">{{ projects[index + 1].name }}</h4>
+          <div class="note">{{ projects[index + 1].note }}</div>
+        </article>
+      </router-link>
+      <router-link class="tile is-parent is-3" :to="{ path: 'detail/'+projects[index + 2].project_id}" append
+                   v-if="index + 2 < projects.length">
+        <article class="tile is-child box">
+          <h4 class="title">{{ projects[index + 2].name }}</h4>
+          <div class="note">{{ projects[index + 2].note }}</div>
+        </article>
+      </router-link>
+      <router-link class="tile is-parent is-3" :to="{ path: 'detail/'+projects[index + 3].project_id}" append
+                   v-if="index + 3 < projects.length">
+        <article class="tile is-child box">
+          <h4 class="title">{{ projects[index + 3].name }}</h4>
+          <div class="note">{{ projects[index + 3].note }}</div>
         </article>
       </router-link>
     </div>
@@ -62,5 +83,9 @@
   .bar {
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+
+  .note {
+    height: 80px;
   }
 </style>
