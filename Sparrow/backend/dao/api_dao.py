@@ -45,7 +45,6 @@ class ApiDao:
 
     def delete(api_id):
         deleted_count, _ = Api.objects.filter(api_id=api_id).delete()
-        print("delete count: " + str(deleted_count))
         if deleted_count > 0:
             return True
         else:

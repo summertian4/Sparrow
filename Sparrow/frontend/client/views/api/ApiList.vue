@@ -1,5 +1,21 @@
 <template>
   <div id="ApiList">
+    <modal :visible="deleteModal.showModal" @close="close">
+      <div class="box">
+        <article>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>确认删除 <strong class="is-danger">{{ currentApi.name }}</strong> ？</strong>
+                <br/>
+                如果您确定删除，请输入该项目的名称，防止误删除
+              </p>
+              <button class="button is-danger long" @click="deleteApi">确认删除</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </modal>
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
@@ -67,7 +83,7 @@
                       <i class="fa fa-eye"></i>
                     </span>
                   </a>
-                  <a class="button">
+                  <a class="button" @click="deleteButtonClicked(api)">
                     <span class="icon is-small">
                       <i class="fa fa-trash"></i>
                     </span>
@@ -85,8 +101,31 @@
 
 <script>
   import axios from 'axios'
+  import {Modal} from 'vue-bulma-modal'
+  import Notification from 'vue-bulma-notification'
+  import Vue from 'vue'
+
+  const NotificationComponent = Vue.extend(Notification)
+
+  const openNotification = (propsData = {
+    title: '',
+    message: '',
+    type: '',
+    direction: '',
+    duration: 4500,
+    container: '.notifications'
+  }) => {
+    return new NotificationComponent({
+      el: document.createElement('div'),
+      propsData
+    })
+  }
 
   export default {
+    components: {
+      Modal,
+      Notification
+    },
     props: {
       project: {
         project_id: '',
@@ -97,7 +136,11 @@
     },
     data () {
       return {
-        apis: []
+        apis: [],
+        deleteModal: {
+          showModal: false
+        },
+        currentApi: ''
       }
     },
     created () {
@@ -106,10 +149,42 @@
     computed: {},
 
     methods: {
+      close () {
+        this.deleteModal.showModal = false
+      },
       loadApis (projectId) {
-        axios.get('/frontend/project/' + projectId + '/api//list')
+        axios.get('/frontend/project/' + projectId + '/api/list')
           .then((res) => {
             this.apis = res.data['apis']
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      deleteButtonClicked (api) {
+        this.deleteModal.showModal = true
+        this.currentApi = api
+      },
+      deleteApi () {
+        axios.get('/frontend/project/' + this.project.project_id + '/api/delete/' + this.currentApi.api_id)
+          .then((res) => {
+            var code = res.data['code']
+            if (code === 200) {
+              this.deleteModal.showModal = false
+              openNotification({
+                message: '删除成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.loadApis(this.project.project_id)
+              // reload
+            } else {
+              openNotification({
+                message: '删除失败',
+                type: 'danger',
+                duration: 2000
+              })
+            }
           })
           .catch(function (error) {
             console.log(error)

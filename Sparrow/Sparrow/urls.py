@@ -42,6 +42,7 @@ urlpatterns = [
     path('frontend/project/<project_id>/api/create', ApiAction.create),
     path('frontend/project/<project_id>/api/list', ApiAction.list),
     path('frontend/project/<project_id>/api/search', ApiAction.search),
+    path('frontend/project/<project_id>/api/delete/<api_id>', ApiAction.delete),
     # url(r'^api/', include('Sparrow.urls', namespace='api')),
     # url(r'^$', TemplateView.as_view(template_name="index.html")),
 ]

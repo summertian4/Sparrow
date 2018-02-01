@@ -122,12 +122,15 @@ class ApiAction:
             context['api'] = api
             return render(request, 'api/update.html', context)
 
-    def delete(request, api_id):
-        succesed = ApiDao.delete(api_id)
-        if succesed:
-            return HttpResponseRedirect('/')
+    def delete(request, project_id, api_id):
+        if request.method == 'GET':
+            succesed = ApiDao.delete(api_id)
+            if succesed:
+                data = CommonData.response_data(Success, "Success")
+                return HttpResponse(json.dumps(data), content_type="application/json")
+            else:
+                data = CommonData.response_data(DaoOperationError, "Delete Failed")
+                return HttpResponse(json.dumps(data), content_type="application/json")
         else:
-            # 返回到失败页面
-            request.method = Api.Method.POST.value
-            request.POST = QueryDict(Sparrow._const.kError + "=" + "删除 API 失败")
-            return error(request)
+            data = CommonData.response_data(RequetMethodError, "GET is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
