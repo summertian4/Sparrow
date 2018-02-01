@@ -43,6 +43,9 @@ class Project(models.Model, Dictable):
     status = models.IntegerField(default=1)
     apis = models.ManyToManyField(Api)
 
+    createTime = models.DateTimeField(auto_now_add=True)
+    updateTime = models.DateTimeField(auto_now=True)
+
     @unique
     class Status(Enum):
         Disabled = 0

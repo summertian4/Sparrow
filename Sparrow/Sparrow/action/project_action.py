@@ -4,6 +4,7 @@ import json
 from backend.dao.project_dao import ProjectDao
 from django.views.decorators.csrf import csrf_exempt
 from Sparrow.action.common_action import CommonData
+from Sparrow.action.common_action import *
 from Sparrow.forms import *
 from backend.models import Project
 
@@ -19,14 +20,14 @@ class ProjectAction:
         response_data = {}
         project_list = ProjectDao.get_all_project_list()
         response_data["projects"] = project_list
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
 
     def detail(request, project_id):
         response_data = {}
 
         project = ProjectDao.get_project_with_id(project_id)
         response_data["project"] = project.as_dict()
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
     def create(request):
@@ -93,7 +94,7 @@ class ProjectAction:
                         data['repeatability'] = True
                 else:
                     data['repeatability'] = True
-            return HttpResponse(json.dumps(data), content_type="application/json")
+            return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "POST is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
