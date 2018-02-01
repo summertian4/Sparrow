@@ -29,7 +29,7 @@
                   如果您确定删除，请输入该项目的名称，防止误删除
                 </p>
                 <input v-bind:class="{ 'is-danger': !deleteModalVerification }" class="input" type="text"
-                       placeholder="请输入您的项目名称" v-model.trim=="deleteModal.inputName">
+                       placeholder="请输入您的项目名称" v-model.trim="deleteModal.inputName">
                 <hr class="gradient-red"/>
                 <button class="button is-danger long" @click="deleteProject">确认删除</button>
               </div>
@@ -45,7 +45,7 @@
               <label class="label">项目名称</label>
               <p class="control has-icon has-icon-right">
                 <input v-bind:class="{ 'is-danger': !verification.name }" class="input" type="text"
-                       placeholder="请输入您的项目名称" v-model.trim=="project.name">
+                       placeholder="请输入您的项目名称" v-model.trim="project.name">
                 <span class="icon is-small" v-if="!verification.name">
                <i class="fa fa-warning"></i>
               </span>

@@ -30,6 +30,9 @@ class Api(models.Model, Dictable):
     status = models.IntegerField(default=0)
     responseJson = models.TextField(default="", blank=True, null=True)
 
+    createTime = models.DateTimeField(auto_now_add=True)
+    updateTime = models.DateTimeField(auto_now=True)
+
     @unique
     class Status(Enum):
         Disabled = 0
@@ -42,6 +45,9 @@ class Project(models.Model, Dictable):
     note = models.CharField(max_length=512, null=True, default="")
     status = models.IntegerField(default=1)
     apis = models.ManyToManyField(Api)
+
+    createTime = models.DateTimeField(auto_now_add=True)
+    updateTime = models.DateTimeField(auto_now=True)
 
     @unique
     class Status(Enum):

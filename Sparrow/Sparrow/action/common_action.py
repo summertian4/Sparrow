@@ -5,6 +5,11 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 import json
 from enum import Enum, unique
+import datetime
+
+def datetime2string(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 class CommonData(object):
     def response_data(code, message):
