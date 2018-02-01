@@ -26,7 +26,7 @@ class ProjectAction:
         response_data = {}
 
         project = ProjectDao.get_project_with_id(project_id)
-        response_data["project"] = project.as_dict()
+        response_data["project"] = model_to_dict(project)
         return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt

@@ -3,9 +3,9 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <h4 class="title">{{ project.name }} </h4>
-          <router-link class="right" :to="{ path: '/api/create'}">
-            <button class="button is-primary">添加</button>
+          <h4 class="title">{{ project.name }}</h4>
+          <router-link class="right" :to="{ path: '/project/'+project.project_id+'/api/create'}">
+            <button class="button is-primary">添加 </button>
           </router-link>
           <table class="table">
             <thead>
@@ -27,7 +27,7 @@
             </tr>
             </tfoot>
             <tbody>
-            <tr v-for="api in project.apis" :key="index">
+            <tr v-for="api in apis" :key="index">
               <td>
                 <div v-if="api.method == 'GET'">
                   <div class="button green is-active">
@@ -84,22 +84,38 @@
 </template>
 
 <script>
+  import axios from 'axios'
 
   export default {
-    data () {
-      return {}
-    },
-
     props: {
-      project: ''
+      project: {
+        project_id: '',
+        name: '',
+        status: 1,
+        note: ''
+      }
     },
-
+    data () {
+      return {
+        apis: []
+      }
+    },
     created () {
     },
 
     computed: {},
 
-    methods: {}
+    methods: {
+      loadApis (projectId) {
+        axios.get('/frontend/project/' + projectId + '/api//list')
+          .then((res) => {
+            this.apis = res.data['apis']
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
+    }
   }
 </script>
 

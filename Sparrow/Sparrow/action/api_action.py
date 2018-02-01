@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
 from backend.dao.api_dao import ApiDao
+from backend.dao.project_dao import ProjectDao
 import json
 from django.http import HttpResponseRedirect
 from Sparrow.forms import *
@@ -16,11 +17,10 @@ RequetMethodError = 1003
 Success = 200
 
 class ApiAction:
-    def list(request):
+    def list(request, project_id):
         response_data = {}
-        apis_list = ApiDao.get_all_api_list()
-        response_data['apis'] = apis_list
-        response_data['method'] = CommonData.Method.GET.value
+        project = ProjectDao.get_project_with_id(project_id).as_dict()
+        response_data['apis'] = project['apis']
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     @csrf_exempt

@@ -3,7 +3,7 @@
     <article class="tile is-child box">
       <tabs animation="slide" :only-fade="false">
         <tab-pane label="API 列表" selected>
-          <api-list :project="project"></api-list>
+          <api-list ref="apilist" :project="project"></api-list>
         </tab-pane>
         <tab-pane label="项目设置">
           <project-setting :project="project"></project-setting>
@@ -44,6 +44,7 @@
         axios.get('/frontend/project/detail/' + this.$route.params.id)
           .then((res) => {
             this.project = res.data['project']
+            this.$refs.apilist.loadApis(this.project.project_id)
           })
           .catch(function (error) {
             console.log(error)

@@ -25,7 +25,7 @@ export default new Router({
     },
     {
       name: '项目 / API / 添加',
-      path: '/api/create',
+      path: '/project/:project_id/api/create',
       component: require('../views/api/create')
     },
     {

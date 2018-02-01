@@ -39,8 +39,9 @@ urlpatterns = [
     path('frontend/project/update/<api_id>', ProjectAction.update),
     path('frontend/project/search', ProjectAction.search),
     path('frontend/project/delete', ProjectAction.delete),
-    path('frontend/api/create', ApiAction.create),
-    path('frontend/api/search', ApiAction.search),
+    path('frontend/project/<project_id>/api/create', ApiAction.create),
+    path('frontend/project/<project_id>/api/list', ApiAction.list),
+    path('frontend/project/<project_id>/api/search', ApiAction.search),
     # url(r'^api/', include('Sparrow.urls', namespace='api')),
     # url(r'^$', TemplateView.as_view(template_name="index.html")),
 ]

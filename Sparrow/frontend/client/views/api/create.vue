@@ -150,7 +150,7 @@
             var formData = qs.stringify(this.api)
             axios({
               method: 'post',
-              url: '/frontend/api/create',
+              url: '/frontend/project/' + this.$route.params.project_id + '/api/create',
               data: formData
             }).then(function (res) {
               var code = res.data['code']
