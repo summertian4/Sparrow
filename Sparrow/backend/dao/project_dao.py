@@ -4,7 +4,7 @@ import datetime
 
 class ProjectDao:
     def get_all_projects():
-        projects = Project.objects.all()
+        projects = Project.objects.all().order_by('-createTime')
         return projects
 
     def get_all_project_list():
