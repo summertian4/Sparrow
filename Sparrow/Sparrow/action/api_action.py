@@ -21,9 +21,12 @@ Success = 200
 class ApiAction:
     def list(request, project_id):
         response_data = {}
-        project = ProjectDao.get_project_with_id(project_id).as_dict()
-        response_data['apis'] = project['apis']
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        apis = ProjectDao.get_project_with_id(project_id).apis.order_by('-createTime')
+        apis_dict = []
+        for api in apis:
+            apis_dict.append(api.as_dict())
+        response_data['apis'] = apis_dict
+        return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
     def create(request, project_id):
