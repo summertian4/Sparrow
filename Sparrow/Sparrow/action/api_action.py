@@ -10,6 +10,8 @@ from django.http import QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from Sparrow.action.common_action import CommonData
 from backend.models import Api
+from Sparrow.action.common_action import *
+from django.forms.models import model_to_dict
 
 FormParseError = 1001
 DaoOperationError = 1002
@@ -24,7 +26,7 @@ class ApiAction:
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     @csrf_exempt
-    def create(request):
+    def create(request, project_id):
         if request.method == CommonData.Method.POST.value:
             form = ApiCreateForm(data=request.POST)
             # check whether it's valid:
@@ -37,11 +39,15 @@ class ApiAction:
                 model.status = form.clean().get('status')
                 model.responseJson = form.clean().get('responseJson')
                 api = ApiDao.create(model)
+                project = ProjectDao.get_project_with_id(project_id)
+                project.apis.add(api)
+                project.save()
                 if api is None:
                     data = CommonData.response_data(DaoOperationError, "API create faild")
                     return HttpResponse(json.dumps(data), content_type="application/json")
                 else:
                     data = CommonData.response_data(Success, "sucsses")
+                    data['api'] = model_to_dict(api)
                     return HttpResponse(json.dumps(data), content_type="application/json")
             else:
                 data = CommonData.response_data(FormParseError, "form parse faild")
@@ -50,18 +56,26 @@ class ApiAction:
             data = CommonData.response_data(RequetMethodError, "GET is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-    def search(request):
+    def search(request, project_id):
         if request.method == 'GET':
             path = request.GET['path']
-            method = request.GET['method']
-            api = ApiDao.get_api(path, method)
+            if path is None:
+                return
+            api = ApiDao.get_apis_with_project_id_and_path(project_id, path).first()
             data = CommonData.response_data(Success, "Success")
             if api is None:
-                data['exist'] = False
+                data['repeatability'] = False
             else:
                 data['api'] = api.as_dict()
-                data['exist'] = True
-            return HttpResponse(json.dumps(data), content_type="application/json")
+                if 'api_id' in request.GET.keys():
+                    api_id = request.GET['api_id']
+                    if str(api.api_id) == str(api_id):
+                        data['repeatability'] = False
+                    else:
+                        data['repeatability'] = True
+                else:
+                    data['repeatability'] = True
+            return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "POST is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")

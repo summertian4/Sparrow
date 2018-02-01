@@ -1,20 +1,5 @@
 <template>
   <div>
-    <modal :visible="showModal" @close="close">
-      <div class="box">
-        <article class="media">
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>创建失败</strong>
-                <br>
-                {{ errorMessage.modal }}
-              </p>
-            </div>
-          </div>
-        </article>
-      </div>
-    </modal>
     <div class="tile is-ancestor">
       <article class="tile is-child box">
         <form @submit.prevent="submit">
@@ -47,18 +32,32 @@
 <script>
   import axios from 'axios'
   import qs from 'qs'
-  import {Modal} from 'vue-bulma-modal'
+  import Notification from 'vue-bulma-notification'
+  import Vue from 'vue'
+
+  const NotificationComponent = Vue.extend(Notification)
+
+  const openNotification = (propsData = {
+    title: '',
+    message: '',
+    type: '',
+    direction: '',
+    duration: 4500,
+    container: '.notifications'
+  }) => {
+    return new NotificationComponent({
+      el: document.createElement('div'),
+      propsData
+    })
+  }
 
   export default {
-    components: {
-      Modal
-    },
+    components: {},
 
     props: {},
 
     data () {
       return {
-        showModal: false,
         project: {
           name: '',
           status: 1,
@@ -80,10 +79,6 @@
     computed: {},
 
     methods: {
-      close () {
-        this.$emit('close')
-      },
-
       isEmpty (obj) {
         if (obj.length === 0 || obj.length === '' || obj === null) {
           return true
@@ -132,10 +127,14 @@
               var code = res.data['code']
               if (code === 200) {
                 var model = res.data['project']
-                this.$router.push({ path: '/project/detail/' + model.project_id })
+                this.$router.push({path: '/project/detail/' + model.project_id})
               } else {
                 this.errorMessage.modal = res.data['message']
-                this.showModal = true
+                openNotification({
+                  message: '创建失败',
+                  type: 'danger',
+                  duration: 2000
+                })
               }
             }).catch(function (error) {
               console.log(error)

@@ -28,6 +28,14 @@ class ApiDao:
         api = Api.objects.get(api_id=api_id)
         return api
 
+    def get_apis_with_project_id(project_id):
+        apis = Api.objects.filter(project__project_id=project_id)
+        return apis
+
+    def get_apis_with_project_id_and_path(project_id, path):
+        apis = Api.objects.filter(project__project_id = project_id, path = path)
+        return apis
+
     def get_api(path, method):
         try:
             api = Api.objects.get(path=path, method=method)

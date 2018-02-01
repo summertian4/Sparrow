@@ -27,7 +27,7 @@
             </tr>
             </tfoot>
             <tbody>
-            <tr v-for="api in apis" :key="index">
+            <tr v-for="api in apis" :key="api.api_id">
               <td>
                 <div v-if="api.method == 'GET'">
                   <div class="button green is-active">

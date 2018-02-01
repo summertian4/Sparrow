@@ -78,6 +78,24 @@
 <script>
   import axios from 'axios'
   import qs from 'qs'
+  import Notification from 'vue-bulma-notification'
+  import Vue from 'vue'
+
+  const NotificationComponent = Vue.extend(Notification)
+
+  const openNotification = (propsData = {
+    title: '',
+    message: '',
+    type: '',
+    direction: '',
+    duration: 4500,
+    container: '.notifications'
+  }) => {
+    return new NotificationComponent({
+      el: document.createElement('div'),
+      propsData
+    })
+  }
 
   export default {
     components: {},
@@ -118,51 +136,64 @@
           return false
         }
       },
-      verify (func) {
+      verify (callback) {
         // 校验空串
-        for (var prop in this.api) {
+        for (var prop in this.verification) {
           if (this.isEmpty(this.api[prop])) {
             this.verification[prop] = false
             this.errorMessage[prop] = '不能为空'
-            func(false)
+            callback(false)
             return
           }
         }
-        // name 校验
+        // 同名校验
         axios({
           method: 'get',
-          url: '/frontend/api/search',
+          url: '/frontend/project/' + this.$route.params.project_id + '/api/search',
           params: {
-            path: this.api.path,
-            method: this.api.method
+            path: this.api.path
           }
         }).then((res) => {
-          var exist = res.data['exist']
-          console.log('api is exist')
-          func(!exist)
+          var repeatability = res.data['repeatability']
+          if (repeatability) {
+            this.verification.name = false
+            this.errorMessage.name = '该请求路径的 API 已经存在'
+          }
+          callback(!repeatability)
         }).catch(function (error) {
           console.log(error)
         })
       },
+
       submit () {
-        this.verify(function (ok) {
+        this.verify((ok) => {
           if (ok) {
             var formData = qs.stringify(this.api)
             axios({
               method: 'post',
               url: '/frontend/project/' + this.$route.params.project_id + '/api/create',
               data: formData
-            }).then(function (res) {
+            }).then((res) => {
               var code = res.data['code']
               if (code === 200) {
-                console.log('创建成功')
+                var model = res.data['project']
+                openNotification({
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.$router.push({path: '/project/' + this.$route.params.project_id + +'api/detail/' + model.api_id})
+              } else {
+                this.errorMessage.modal = res.data['message']
+                openNotification({
+                  message: '创建失败',
+                  type: 'danger',
+                  duration: 2000
+                })
               }
-              console.log(code)
             }).catch(function (error) {
               console.log(error)
             })
-          } else {
-            console.log('验证未通过')
           }
         })
       }
@@ -173,30 +204,6 @@
 <style scoped>
   .button {
     width: 80px;
-  }
-
-  .green {
-    background-color: #5eceb3;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .blue {
-    background-color: #4373d5;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .yellow {
-    background-color: #fadd6e;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .red {
-    background-color: #eb4c64;
-    border-color: transparent;
-    color: #fff;
   }
 
   .right {
