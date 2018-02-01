@@ -30,6 +30,9 @@ class Api(models.Model, Dictable):
     status = models.IntegerField(default=0)
     responseJson = models.TextField(default="", blank=True, null=True)
 
+    createTime = models.DateTimeField(auto_now_add=True)
+    updateTime = models.DateTimeField(auto_now=True)
+
     @unique
     class Status(Enum):
         Disabled = 0
