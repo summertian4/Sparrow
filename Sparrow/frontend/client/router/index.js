@@ -34,6 +34,11 @@ export default new Router({
       component: require('../views/api/update')
     },
     {
+      name: '项目 / API / 详情',
+      path: '/project/:project_id/api/detail/:api_id',
+      component: require('../views/api/detail')
+    },
+    {
       name: 'Login',
       path: '/login',
       component: require('../views/auth/Login')

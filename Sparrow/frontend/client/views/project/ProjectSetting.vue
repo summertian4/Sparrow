@@ -31,7 +31,7 @@
                 <input v-bind:class="{ 'is-danger': !deleteModalVerification }" class="input" type="text"
                        placeholder="请输入您的项目名称" v-model.trim="deleteModal.inputName">
                 <hr class="gradient-red"/>
-                <button class="button is-danger long" @click="deleteProject">确认删除</button>
+                <button class="button is-danger is-fullwidth" @click="deleteProject">确认删除</button>
               </div>
             </div>
           </article>
@@ -66,7 +66,7 @@
             </div>
           </form>
           <hr class="gradient-green"/>
-          <button class="button is-danger long" v-on:click="deleteModal.showModal = true">删除</button>
+          <button class="button is-danger is-fullwidth" v-on:click="deleteModal.showModal = true">删除</button>
         </article>
       </div>
     </div>
@@ -283,9 +283,5 @@
 
   .blank {
     height: 30px;
-  }
-
-  .long {
-    width: 100%;
   }
 </style>

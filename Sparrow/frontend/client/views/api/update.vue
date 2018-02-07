@@ -139,7 +139,7 @@
         }).catch(function (error) {
           console.log(error)
           openNotification({
-            message: error,
+            message: '更新失败',
             type: 'danger',
             duration: 2000
           })
@@ -178,6 +178,11 @@
           callback(!exist)
         }).catch(function (error) {
           console.log(error)
+          openNotification({
+            message: '请求失败',
+            type: 'danger',
+            duration: 2000
+          })
         })
       },
 
@@ -192,14 +197,12 @@
             }).then((res) => {
               var code = res.data['code']
               if (code === 200) {
-//                var model = res.data['api']
                 openNotification({
                   message: '更新成功',
                   type: 'success',
                   duration: 2000
                 })
-                // TODO: 跳转详情
-//                this.$router.push({path: '/project/' + this.$route.params.project_id + +'api/detail/' + model.api_id})
+                this.$router.push({path: '/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id})
               } else {
                 this.errorMessage.modal = res.data['message']
                 openNotification({
@@ -211,7 +214,7 @@
             }).catch(function (error) {
               console.log(error)
               openNotification({
-                message: error,
+                message: '请求失败',
                 type: 'danger',
                 duration: 2000
               })
