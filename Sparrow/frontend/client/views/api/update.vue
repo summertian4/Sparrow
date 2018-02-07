@@ -3,7 +3,7 @@
     <div class="tile is-ancestor">
       <article class="tile is-child box">
         <form @submit.prevent="submit">
-          <h1 class="title">添加 API</h1>
+          <h1 class="title">更新 API</h1>
           <div class="block">
             <label class="label">请求路径</label>
             <p class="control has-icon has-icon-right">
@@ -65,7 +65,7 @@
             </p>
 
             <p class="control">
-              <button class="button is-primary right" type="submit">确认</button>
+              <button class="button is-primary right" type="submit">更新</button>
               <button class="button is-link right">取消</button>
             </p>
           </div>
@@ -124,11 +124,27 @@
     },
 
     created () {
+      this.loadApi()
     },
 
     computed: {},
 
     methods: {
+      loadApi () {
+        axios({
+          method: 'get',
+          url: '/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id
+        }).then((res) => {
+          this.api = res.data['api']
+        }).catch(function (error) {
+          console.log(error)
+          openNotification({
+            message: error,
+            type: 'danger',
+            duration: 2000
+          })
+        })
+      },
       isEmpty (obj) {
         if (obj.length === 0 || obj.length === '' || obj === null) {
           return true
@@ -154,19 +170,14 @@
             path: this.api.path
           }
         }).then((res) => {
-          var repeatability = res.data['repeatability']
-          if (repeatability) {
-            this.verification.name = false
-            this.errorMessage.name = '该请求路径的 API 已经存在'
+          var exist = res.data['exist']
+          if (exist) {
+            this.verification.path = false
+            this.errorMessage.path = '该路径的 API 已经存在'
           }
-          callback(!repeatability)
+          callback(!exist)
         }).catch(function (error) {
           console.log(error)
-          openNotification({
-            message: error,
-            type: 'danger',
-            duration: 2000
-          })
         })
       },
 
@@ -176,22 +187,23 @@
             var formData = qs.stringify(this.api)
             axios({
               method: 'post',
-              url: '/frontend/project/' + this.$route.params.project_id + '/api/create',
+              url: '/frontend/project/' + this.$route.params.project_id + '/api/update/' + this.$route.params.api_id,
               data: formData
             }).then((res) => {
               var code = res.data['code']
               if (code === 200) {
-                var model = res.data['project']
+//                var model = res.data['api']
                 openNotification({
-                  message: '创建成功',
+                  message: '更新成功',
                   type: 'success',
                   duration: 2000
                 })
-                this.$router.push({path: '/project/' + this.$route.params.project_id + +'api/detail/' + model.api_id})
+                // TODO: 跳转详情
+//                this.$router.push({path: '/project/' + this.$route.params.project_id + +'api/detail/' + model.api_id})
               } else {
                 this.errorMessage.modal = res.data['message']
                 openNotification({
-                  message: '创建失败',
+                  message: '更新失败',
                   type: 'danger',
                   duration: 2000
                 })

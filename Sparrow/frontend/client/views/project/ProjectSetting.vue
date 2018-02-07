@@ -206,6 +206,11 @@
               }
             }).catch(function (error) {
               console.log(error)
+              openNotification({
+                message: error,
+                type: 'danger',
+                duration: 2000
+              })
             })
           }
         })
