@@ -1,7 +1,6 @@
 from backend.models import Project
 import datetime
 
-
 class ProjectDao:
     def get_all_projects():
         projects = Project.objects.all().order_by('-createTime')

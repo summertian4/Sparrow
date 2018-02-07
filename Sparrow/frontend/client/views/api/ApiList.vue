@@ -73,12 +73,12 @@
               <td>{{ api.status }}</td>
               <td class="is-icon">
                 <p class="control has-addons">
-                  <a class="button">
+                  <a class="button" @click="jumpToAPIUpdate(api.api_id)">
                     <span class="icon is-small">
                       <i class="fa fa-pencil"></i>
                     </span>
                   </a>
-                  <a class="button">
+                  <a class="button" @click="jumpToAPIDetail(api.api_id)">
                     <span class="icon is-small">
                       <i class="fa fa-eye"></i>
                     </span>
@@ -189,6 +189,12 @@
           .catch(function (error) {
             console.log(error)
           })
+      },
+      jumpToAPIUpdate (apiId) {
+        this.$router.push({path: '/project/' + this.project.project_id + '/api/update/' + apiId})
+      },
+      jumpToAPIDetail (apiId) {
+        this.$router.push({path: '/project/' + this.project.project_id + '/api/detail/' + apiId})
       }
     }
   }

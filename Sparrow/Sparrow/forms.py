@@ -17,7 +17,6 @@ class ApiUpdateForm(forms.Form):
     responseJson = forms.CharField(widget=forms.Textarea())
 
 
-
 class ProjectCreateForm(forms.Form):
     name = forms.CharField(max_length=128)
     note = forms.CharField(max_length=512, required=False)

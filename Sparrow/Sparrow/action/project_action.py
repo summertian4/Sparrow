@@ -54,24 +54,24 @@ class ProjectAction:
             return HttpResponse(json.dumps(data), content_type="application/json")
 
     @csrf_exempt
-    def update(request, api_id):
+    def update(request, project_id):
         if request.method == CommonData.Method.POST.value:
             form = ProjectUpateForm(data=request.POST)
             if form.is_valid():
-                model = ProjectDao.get_project_with_id(api_id)
+                model = ProjectDao.get_project_with_id(project_id)
                 model.name = form.clean().get('name')
                 model.note = form.clean().get('note')
                 model.status = form.clean().get('status')
                 result = ProjectDao.update(model)
 
                 if result is False:
-                    data = CommonData.response_data(DaoOperationError, "API update faild")
+                    data = CommonData.response_data(DaoOperationError, "Project update faild")
                     return HttpResponse(json.dumps(data), content_type="application/json")
                 else:
                     data = CommonData.response_data(Success, "sucsses")
                     return HttpResponse(json.dumps(data), content_type="application/json")
             else:
-                data = CommonData.response_data(FormParseError, "form parse faild")
+                data = CommonData.response_data(FormParseError, "Form parse faild")
                 return HttpResponse(json.dumps(data), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "GET is invalid")

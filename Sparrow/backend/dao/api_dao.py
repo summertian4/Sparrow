@@ -1,4 +1,5 @@
 from backend.models import Api
+import datetime
 
 class ApiDao:
     def create(model):
@@ -16,12 +17,12 @@ class ApiDao:
 
     def get_all_api_list():
         apis = list(ApiDao.get_all_apis().values('api_id',
-                                               'path',
-                                               'method',
-                                               'name',
-                                               'note',
-                                               'status',
-                                               'responseJson'))
+                                                 'path',
+                                                 'method',
+                                                 'name',
+                                                 'note',
+                                                 'status',
+                                                 'responseJson'))
         return apis
 
     def get_api_with_id(api_id):
@@ -33,7 +34,7 @@ class ApiDao:
         return apis
 
     def get_apis_with_project_id_and_path(project_id, path):
-        apis = Api.objects.filter(project__project_id = project_id, path = path)
+        apis = Api.objects.filter(project__project_id=project_id, path=path)
         return apis
 
     def get_api(path, method):
@@ -59,7 +60,8 @@ class ApiDao:
                                                                 name=model.name,
                                                                 note=model.note,
                                                                 status=model.status,
-                                                                responseJson=model.responseJson)
+                                                                responseJson=model.responseJson,
+                                                                updateTime=datetime.datetime.now())
         if result > 0:
             return True
         else:
