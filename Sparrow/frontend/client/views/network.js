@@ -32,7 +32,7 @@ export function request (url, options) {
   var opt = options || {}
   return new Promise((resolve, reject) => {
     axios({
-      method: opt.type || 'get',
+      method: opt.method || 'get',
       url: url,
       params: opt.params || {},
       data: (opt.headers ? opt.data : opt.data) || {},

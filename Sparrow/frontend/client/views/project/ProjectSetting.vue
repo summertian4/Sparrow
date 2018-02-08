@@ -74,32 +74,14 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import qs from 'qs'
   import {Modal} from 'vue-bulma-modal'
-  import Notification from 'vue-bulma-notification'
-  import Vue from 'vue'
-
-  const NotificationComponent = Vue.extend(Notification)
-
-  const openNotification = (propsData = {
-    title: '',
-    message: '',
-    type: '',
-    direction: '',
-    duration: 4500,
-    container: '.notifications'
-  }) => {
-    return new NotificationComponent({
-      el: document.createElement('div'),
-      propsData
-    })
-  }
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {
-      Modal,
-      Notification
+      Modal
     },
 
     props: {
@@ -166,21 +148,24 @@
           }
         }
         // 同名校验
-        axios({
+        request('/frontend/project/repeat_name_verification', {
           method: 'get',
-          url: '/frontend/project/repeat_name_verification',
           params: {
             name: this.project.name
           }
-        }).then((res) => {
-          var exist = res.data['exist']
+        }).then((data) => {
+          var exist = data['exist']
           if (exist) {
             this.verification.name = false
             this.errorMessage.name = '该名称的项目已经存在'
           }
           callback(!exist)
-        }).catch(function (error) {
-          console.log(error)
+        }).catch((data) => {
+          notification.toast({
+            message: data['message'],
+            type: 'success',
+            duration: 2000
+          })
         })
       },
 
@@ -188,62 +173,44 @@
         this.verify((ok) => {
           if (ok) {
             var formData = qs.stringify(this.project)
-            axios({
+            request('/frontend/project/update/' + this.$route.params.id, {
               method: 'post',
-              url: '/frontend/project/update/' + this.$route.params.id,
               data: formData
-            }).then((res) => {
-              var code = res.data['code']
-              if (code === 200) {
-                openNotification({
-                  message: '更新成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              } else {
-                this.updateModal.message = res.data['message']
-                this.updateModal.showModal = true
-              }
-            }).catch(function (error) {
-              console.log(error)
-              openNotification({
-                message: error,
-                type: 'danger',
+            }).then((data) => {
+              notification.toast({
+                message: '更新成功',
+                type: 'success',
                 duration: 2000
               })
+            }).catch((data) => {
+              this.updateModal.message = data['message']
+              this.updateModal.showModal = true
             })
           }
         })
       },
       deleteProject () {
         if (this.deleteModalVerification === true) {
-          axios({
+          request('/frontend/project/delete', {
             method: 'get',
-            url: '/frontend/project/delete',
             params: {
               project_id: this.$route.params.id
             }
-          }).then((res) => {
-            var code = res.data['code']
-            var message = res.data['message']
-            if (code === 200) {
-              this.close()
-              openNotification({
-                message: '删除成功',
-                type: 'success',
-                duration: 2000
-              })
-              setTimeout(this.jumpToProjectList, 100)
-            } else {
-              this.close()
-              openNotification({
-                message: message,
-                type: 'failed',
-                duration: 2000
-              })
-            }
-          }).catch(function (error) {
-            console.log(error)
+          }).then((data) => {
+            this.close()
+            notification.toast({
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            setTimeout(this.jumpToProjectList, 100)
+          }).catch((data) => {
+            this.close()
+            notification.toast({
+              message: data['message'],
+              type: 'failed',
+              duration: 2000
+            })
           })
         }
       },

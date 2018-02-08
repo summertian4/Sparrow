@@ -100,31 +100,13 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import {Modal} from 'vue-bulma-modal'
-  import Notification from 'vue-bulma-notification'
-  import Vue from 'vue'
-
-  const NotificationComponent = Vue.extend(Notification)
-
-  const openNotification = (propsData = {
-    title: '',
-    message: '',
-    type: '',
-    direction: '',
-    duration: 4500,
-    container: '.notifications'
-  }) => {
-    return new NotificationComponent({
-      el: document.createElement('div'),
-      propsData
-    })
-  }
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {
-      Modal,
-      Notification
+      Modal
     },
     props: {
       project: {
@@ -153,12 +135,16 @@
         this.deleteModal.showModal = false
       },
       loadApis (projectId) {
-        axios.get('/frontend/project/' + projectId + '/api/list')
-          .then((res) => {
-            this.apis = res.data['apis']
+        request('/frontend/project/' + projectId + '/api/list')
+          .then((data) => {
+            this.apis = data['apis']
           })
-          .catch(function (error) {
-            console.log(error)
+          .catch((data) => {
+            notification.toast({
+              message: data['message'],
+              type: 'danger',
+              duration: 2000
+            })
           })
       },
       deleteButtonClicked (api) {
@@ -166,28 +152,22 @@
         this.currentApi = api
       },
       deleteApi () {
-        axios.get('/frontend/project/' + this.project.project_id + '/api/delete/' + this.currentApi.api_id)
-          .then((res) => {
-            var code = res.data['code']
-            if (code === 200) {
-              this.deleteModal.showModal = false
-              openNotification({
-                message: '删除成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.loadApis(this.project.project_id)
-              // reload
-            } else {
-              openNotification({
-                message: '删除失败',
-                type: 'danger',
-                duration: 2000
-              })
-            }
+        request('/frontend/project/' + this.project.project_id + '/api/delete/' + this.currentApi.api_id)
+          .then((data) => {
+            this.deleteModal.showModal = false
+            notification.toast({
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.loadApis(this.project.project_id)
           })
-          .catch(function (error) {
-            console.log(error)
+          .catch((data) => {
+            notification.toast({
+              message: data['message'],
+              type: 'danger',
+              duration: 2000
+            })
           })
       },
       jumpToAPIUpdate (apiId) {

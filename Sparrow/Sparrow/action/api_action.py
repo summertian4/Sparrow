@@ -22,13 +22,13 @@ Success = 200
 
 class ApiAction:
     def list(request, project_id):
-        response_data = {}
         apis = ProjectDao.get_project_with_id(project_id).apis.order_by('-createTime')
         apis_dict = []
         for api in apis:
             apis_dict.append(api.as_dict())
-        response_data['apis'] = apis_dict
-        return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
+        data = CommonData.response_data(Success, "API create faild")
+        data['apis'] = apis_dict
+        return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
     def create(request, project_id):
@@ -68,7 +68,6 @@ class ApiAction:
                 data = CommonData.response_data(MissingParametersError, "缺少参数")
                 return HttpResponse(json.dumps(data), content_type="application/json")
             path = request.GET['path']
-            api_id = request.GET['api_id']
             method = request.GET['method']
             if path is None:
                 return
@@ -78,8 +77,8 @@ class ApiAction:
                 data['repeatability'] = False
             else:
                 data['api'] = api.as_dict()
-
                 if 'api_id' in request.GET.keys():
+                    api_id = request.GET['api_id']
                     if (str(api.api_id) == str(api_id)) and (str(api.method) == str(method)):
                         data['repeatability'] = False
                     else:

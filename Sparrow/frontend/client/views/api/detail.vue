@@ -29,14 +29,6 @@
         </div>
         <div class="control is-horizontal">
           <div class="control-label">
-            <label class="label">请求名称</label>
-          </div>
-          <div class="control">
-           {{ api.name }}
-          </div>
-        </div>
-        <div class="control is-horizontal">
-          <div class="control-label">
             <label class="label">备注</label>
           </div>
           <div class="control">
@@ -65,25 +57,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Notification from 'vue-bulma-notification'
-  import Vue from 'vue'
-
-  const NotificationComponent = Vue.extend(Notification)
-
-  const openNotification = (propsData = {
-    title: '',
-    message: '',
-    type: '',
-    direction: '',
-    duration: 4500,
-    container: '.notifications'
-  }) => {
-    return new NotificationComponent({
-      el: document.createElement('div'),
-      propsData
-    })
-  }
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {},
@@ -109,15 +84,13 @@
 
     methods: {
       loadApi () {
-        axios({
-          method: 'get',
-          url: '/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id
-        }).then((res) => {
-          this.api = res.data['api']
-        }).catch(function (error) {
-          console.log(error)
-          openNotification({
-            message: error,
+        request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
+          method: 'get'
+        }).then((data) => {
+          this.api = data['api']
+        }).catch((data) => {
+          notification.toast({
+            message: data['message'],
             type: 'danger',
             duration: 2000
           })

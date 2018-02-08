@@ -41,7 +41,8 @@
 
 <script>
   import Chart from 'vue-bulma-chartjs'
-  import axios from 'axios'
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {
@@ -63,12 +64,16 @@
 
     methods: {
       loadProjects () {
-        axios.get('/frontend/project/list')
-          .then((res) => {
-            this.projects = res.data['projects']
+        request('/frontend/project/list')
+          .then((data) => {
+            this.projects = data['projects']
           })
-          .catch(function (error) {
-            console.log(error)
+          .catch((data) => {
+            notification.toast({
+              message: data['message'],
+              type: 'danger',
+              duration: 2000
+            })
           })
       }
     }

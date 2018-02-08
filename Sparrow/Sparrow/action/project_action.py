@@ -18,10 +18,10 @@ Success = 200
 
 class ProjectAction:
     def list(request):
-        response_data = {}
         project_list = ProjectDao.get_all_project_list()
-        response_data["projects"] = project_list
-        return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
+        data = CommonData.response_data(Success, "Success")
+        data["projects"] = project_list
+        return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     def detail(request, project_id):
         project = ProjectDao.get_project_with_id(project_id)

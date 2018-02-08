@@ -30,26 +30,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import qs from 'qs'
-  import Notification from 'vue-bulma-notification'
-  import Vue from 'vue'
-
-  const NotificationComponent = Vue.extend(Notification)
-
-  const openNotification = (propsData = {
-    title: '',
-    message: '',
-    type: '',
-    direction: '',
-    duration: 4500,
-    container: '.notifications'
-  }) => {
-    return new NotificationComponent({
-      el: document.createElement('div'),
-      propsData
-    })
-  }
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {},
@@ -97,21 +80,24 @@
           }
         }
         // 同名校验
-        axios({
+        request('/frontend/project/repeat_name_verification', {
           method: 'get',
-          url: '/frontend/project/repeat_name_verification',
           params: {
             name: this.project.name
           }
-        }).then((res) => {
-          var repeatability = res.data['repeatability']
+        }).then((data) => {
+          var repeatability = data['repeatability']
           if (repeatability) {
             this.verification.name = false
             this.errorMessage.name = '该名称的项目已经存在'
           }
           callback(!repeatability)
-        }).catch(function (error) {
-          console.log(error)
+        }).catch((data) => {
+          notification.toast({
+            message: data['message'],
+            type: 'danger',
+            duration: 2000
+          })
         })
       },
 
@@ -119,25 +105,18 @@
         this.verify((ok) => {
           if (ok) {
             var formData = qs.stringify(this.project)
-            axios({
+            request('/frontend/project/create', {
               method: 'post',
-              url: '/frontend/project/create',
               data: formData
-            }).then((res) => {
-              var code = res.data['code']
-              if (code === 200) {
-                var model = res.data['project']
-                this.$router.push({path: '/project/detail/' + model.project_id})
-              } else {
-                this.errorMessage.modal = res.data['message']
-                openNotification({
-                  message: '创建失败',
-                  type: 'danger',
-                  duration: 2000
-                })
-              }
-            }).catch(function (error) {
-              console.log(error)
+            }).then((data) => {
+              var model = data['project']
+              this.$router.push({path: '/project/detail/' + model.project_id})
+            }).catch((data) => {
+              notification.toast({
+                message: data['message'],
+                type: 'danger',
+                duration: 2000
+              })
             })
           }
         })

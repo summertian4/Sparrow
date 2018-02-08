@@ -76,26 +76,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import qs from 'qs'
-  import Notification from 'vue-bulma-notification'
-  import Vue from 'vue'
-
-  const NotificationComponent = Vue.extend(Notification)
-
-  const openNotification = (propsData = {
-    title: '',
-    message: '',
-    type: '',
-    direction: '',
-    duration: 4500,
-    container: '.notifications'
-  }) => {
-    return new NotificationComponent({
-      el: document.createElement('div'),
-      propsData
-    })
-  }
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {},
@@ -131,15 +114,13 @@
 
     methods: {
       loadApi () {
-        axios({
-          method: 'get',
-          url: '/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id
-        }).then((res) => {
-          this.api = res.data['api']
-        }).catch(function (error) {
-          console.log(error)
-          openNotification({
-            message: '更新失败',
+        request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
+          method: 'get'
+        }).then((data) => {
+          this.api = data['api']
+        }).catch((data) => {
+          notification.toast({
+            message: data['message'],
             type: 'danger',
             duration: 2000
           })
@@ -163,31 +144,23 @@
           }
         }
         // 同名校验
-        axios({
+        request('/frontend/project/' + this.$route.params.project_id + '/api/repeat_name_verification', {
           method: 'get',
-          url: '/frontend/project/' + this.$route.params.project_id + '/api/repeat_name_verification',
           params: {
-            path: this.api.path
+            path: this.api.path,
+            method: this.api.method,
+            api_id: this.api.api_id
           }
-        }).then((res) => {
-          if (res.data['code'] !== 200) {
-            openNotification({
-              message: res.data['message'],
-              type: 'danger',
-              duration: 2000
-            })
-            return
-          }
-          var exist = res.data['exist']
-          if (exist) {
+        }).then((data) => {
+          var repeatability = data['repeatability']
+          if (repeatability) {
             this.verification.path = false
             this.errorMessage.path = '该路径的 API 已经存在'
           }
-          callback(!exist)
-        }).catch(function (error) {
-          console.log(error)
-          openNotification({
-            message: '请求失败',
+          callback(!repeatability)
+        }).catch((data) => {
+          notification.toast({
+            message: data['message'],
             type: 'danger',
             duration: 2000
           })
@@ -198,31 +171,19 @@
         this.verify((ok) => {
           if (ok) {
             var formData = qs.stringify(this.api)
-            axios({
+            request('/frontend/project/' + this.$route.params.project_id + '/api/update/' + this.$route.params.api_id, {
               method: 'post',
-              url: '/frontend/project/' + this.$route.params.project_id + '/api/update/' + this.$route.params.api_id,
               data: formData
-            }).then((res) => {
-              var code = res.data['code']
-              if (code === 200) {
-                openNotification({
-                  message: '更新成功',
-                  type: 'success',
-                  duration: 2000
-                })
-                this.$router.push({path: '/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id})
-              } else {
-                this.errorMessage.modal = res.data['message']
-                openNotification({
-                  message: '更新失败',
-                  type: 'danger',
-                  duration: 2000
-                })
-              }
-            }).catch(function (error) {
-              console.log(error)
-              openNotification({
-                message: '请求失败',
+            }).then((data) => {
+              notification.toast({
+                message: '更新成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.$router.push({path: '/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id})
+            }).catch((data) => {
+              notification.toast({
+                message: data['message'],
                 type: 'danger',
                 duration: 2000
               })
