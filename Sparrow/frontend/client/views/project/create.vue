@@ -99,7 +99,7 @@
         // 同名校验
         axios({
           method: 'get',
-          url: '/frontend/project/search',
+          url: '/frontend/project/repeat_name_verification',
           params: {
             name: this.project.name
           }

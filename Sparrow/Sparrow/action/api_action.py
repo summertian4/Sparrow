@@ -64,7 +64,6 @@ class ApiAction:
     def repeat_name_verification(request, project_id):
         if request.method == 'GET':
             if ('path' not in request.GET.keys()) or \
-                ('api_id' not in request.GET.keys()) or \
                 ('method' not in request.GET.keys()):
                 data = CommonData.response_data(MissingParametersError, "缺少参数")
                 return HttpResponse(json.dumps(data), content_type="application/json")
@@ -81,16 +80,12 @@ class ApiAction:
                 data['api'] = api.as_dict()
 
                 if 'api_id' in request.GET.keys():
-                    api_id = request.GET['api_id']
                     if (str(api.api_id) == str(api_id)) and (str(api.method) == str(method)):
                         data['repeatability'] = False
                     else:
                         data['repeatability'] = True
                 else:
                     data['repeatability'] = True
-
-
-
             return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "POST is invalid")

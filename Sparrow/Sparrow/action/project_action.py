@@ -12,6 +12,7 @@ FormParseError = 1001
 DaoOperationError = 1002
 RequetMethodError = 1003
 RequetParamsError = 1003
+MissingParametersError = 1004
 Success = 200
 
 
@@ -76,8 +77,11 @@ class ProjectAction:
             data = CommonData.response_data(RequetMethodError, "GET is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-    def search(request):
+    def repeat_name_verification(request):
         if request.method == 'GET':
+            if ('name' not in request.GET.keys()):
+                data = CommonData.response_data(MissingParametersError, "缺少参数")
+                return HttpResponse(json.dumps(data), content_type="application/json")
             name = request.GET['name']
             project = ProjectDao.get_project_with_Name(name)
             data = CommonData.response_data(Success, "Success")
