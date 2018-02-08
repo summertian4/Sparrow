@@ -17,7 +17,8 @@
   import ProjectSetting from './ProjectSetting'
   import ApiList from '../api/ApiList'
   import {Tabs, TabPane} from 'vue-bulma-tabs'
-  import axios from 'axios'
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {
@@ -41,13 +42,17 @@
 
     methods: {
       loadProjects () {
-        axios.get('/frontend/project/detail/' + this.$route.params.id)
-          .then((res) => {
-            this.project = res.data['project']
+        request('/frontend/project/detail/' + this.$route.params.id)
+          .then((data) => {
+            this.project = data['project']
             this.$refs.apilist.loadApis(this.project.project_id)
           })
-          .catch(function (error) {
-            console.log(error)
+          .catch((data) => {
+            notification.toast({
+              message: data['message'],
+              type: 'danger',
+              duration: 2000
+            })
           })
       }
     }

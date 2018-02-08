@@ -39,7 +39,7 @@ urlpatterns = [
     path('frontend/project/delete', ProjectAction.delete),
     path('frontend/project/<project_id>/api/create', ApiAction.create),
     path('frontend/project/<project_id>/api/list', ApiAction.list),
-    path('frontend/project/<project_id>/api/search', ApiAction.search),
+    path('frontend/project/<project_id>/api/repeat_name_verification', ApiAction.repeat_name_verification),
     path('frontend/project/<project_id>/api/delete/<api_id>', ApiAction.delete),
     path('frontend/project/<project_id>/api/detail/<api_id>', ApiAction.detail),
     path('frontend/project/<project_id>/api/update/<api_id>', ApiAction.update),

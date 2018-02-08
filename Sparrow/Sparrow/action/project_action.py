@@ -23,11 +23,10 @@ class ProjectAction:
         return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
 
     def detail(request, project_id):
-        response_data = {}
-
         project = ProjectDao.get_project_with_id(project_id)
-        response_data["project"] = model_to_dict(project)
-        return HttpResponse(json.dumps(response_data, default=datetime2string), content_type="application/json")
+        data = CommonData.response_data(Success, "Success")
+        data["project"] = model_to_dict(project)
+        return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
     def create(request):

@@ -149,7 +149,7 @@
         // 同名校验
         axios({
           method: 'get',
-          url: '/frontend/project/' + this.$route.params.project_id + '/api/search',
+          url: '/frontend/project/' + this.$route.params.project_id + '/api/repeat_name_verification',
           params: {
             path: this.api.path
           }

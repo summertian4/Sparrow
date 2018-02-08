@@ -165,11 +165,19 @@
         // 同名校验
         axios({
           method: 'get',
-          url: '/frontend/project/' + this.$route.params.project_id + '/api/search',
+          url: '/frontend/project/' + this.$route.params.project_id + '/api/repeat_name_verification',
           params: {
             path: this.api.path
           }
         }).then((res) => {
+          if (res.data['code'] !== 200) {
+            openNotification({
+              message: res.data['message'],
+              type: 'danger',
+              duration: 2000
+            })
+            return
+          }
           var exist = res.data['exist']
           if (exist) {
             this.verification.path = false
