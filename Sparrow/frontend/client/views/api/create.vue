@@ -181,13 +181,13 @@
             }).then((res) => {
               var code = res.data['code']
               if (code === 200) {
-                var model = res.data['project']
+                var model = res.data['api']
                 openNotification({
                   message: '创建成功',
                   type: 'success',
                   duration: 2000
                 })
-                this.$router.push({path: '/project/' + this.$route.params.project_id + +'api/detail/' + model.api_id})
+                this.$router.push({path: '/project/' + this.$route.params.project_id + '/api/detail/' + model.api_id})
               } else {
                 this.errorMessage.modal = res.data['message']
                 openNotification({
