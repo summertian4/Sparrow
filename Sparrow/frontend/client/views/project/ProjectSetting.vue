@@ -128,6 +128,7 @@
     methods: {
       close () {
         this.deleteModal.showModal = false
+        this.updateModal.showModal = false
       },
 
       isEmpty (obj) {
