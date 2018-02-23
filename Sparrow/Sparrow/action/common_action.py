@@ -56,3 +56,9 @@ def dispatch(request, path):
     # return HttpResponse(json.dumps(json_dic), content_type="application/json")
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@csrf_exempt
+def mock(request, project_id, path):
+    method = str(request.method)
+    api = ApiDao.get_api(path, method)
+    response_data = json.loads(api.responseJson)
+    return HttpResponse(json.dumps(response_data), content_type="application/json")

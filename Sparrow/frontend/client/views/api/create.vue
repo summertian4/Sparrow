@@ -55,14 +55,7 @@
             </p>
 
             <label class="label">返回数据</label>
-            <p class="control  has-icon has-icon-right">
-              <textarea v-bind:class="{ 'is-danger': !verification.responseJson }" class="textarea" placeholder=""
-                        v-model.trim="api.responseJson"></textarea>
-              <span class="icon is-small" v-if="!verification.responseJson">
-               <i class="fa fa-warning"></i>
-              </span>
-              <span class="help is-danger" v-if="!verification.responseJson">{{ errorMessage.responseJson }}</span>
-            </p>
+            <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson"/>
 
             <p class="control">
               <button class="button is-primary right" type="submit">确认</button>
@@ -79,9 +72,12 @@
   import qs from 'qs'
   import {request} from '../network.js'
   import * as notification from '../notification.js'
+  import JsonEditor from './JsonEditor'
 
   export default {
-    components: {},
+    components: {
+      JsonEditor
+    },
 
     data () {
       return {
@@ -102,7 +98,11 @@
           path: '',
           name: '',
           responseJson: ''
-        }
+        },
+        response: {
+          showModal: true
+        },
+        editorJson: {}
       }
     },
 
@@ -112,6 +112,12 @@
     computed: {},
 
     methods: {
+      close () {
+        this.response.showModal = false
+      },
+      inputResponseJson (newVal) {
+        this.api.responseJson = JSON.stringify(newVal)
+      },
       isEmpty (obj) {
         if (obj.length === 0 || obj.length === '' || obj === null) {
           return true
@@ -145,7 +151,7 @@
           callback(!repeatability)
         }).catch((data) => {
           notification.toast({
-            message: data['messsage'],
+            message: data['message'],
             type: 'danger',
             duration: 2000
           })
@@ -168,8 +174,9 @@
               })
               this.$router.push({path: '/project/' + this.$route.params.project_id + '/api/detail/' + model.api_id})
             }).catch((data) => {
+              console.log('233')
               notification.toast({
-                message: data['messsage'],
+                message: data['message'],
                 type: 'danger',
                 duration: 2000
               })
@@ -188,5 +195,11 @@
 
   .right {
     float: right;
+  }
+
+  .json-text-area {
+    width: 80%;
+    height: 80%;
+    background: #ffffff;
   }
 </style>
