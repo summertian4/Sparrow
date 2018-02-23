@@ -40,22 +40,6 @@ def error(request):
 
     return render(request, 'error.html', context)
 
-
-@csrf_exempt
-def dispatch(request, path):
-    response_data = {}
-    response_data["name"] = "hello"
-    # try:
-    #     api = ApiDao.get_api(path, request.method)
-    # except:
-    #     request.POST = QueryDict(Sparrow._const.kError + "=" + "API:" + path + " 不存在")
-    #     return error(request)
-    #
-    #
-    # json_dic = ast.literal_eval(api.responseJson)
-    # return HttpResponse(json.dumps(json_dic), content_type="application/json")
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
 @csrf_exempt
 def mock(request, project_id, path):
     method = str(request.method)

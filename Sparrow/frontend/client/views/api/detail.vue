@@ -1,7 +1,9 @@
 <template>
   <div>
     <article class="tile is-child box">
-      <h1 class="title">{{ api.path }}</h1>
+      <h1 class="title">{{ api.path }}
+        <a :href="mockLink" target="_blank">[MOCK]</a>
+      </h1>
       <div class="block">
         <div class="control is-horizontal">
           <div class="control-label">
@@ -16,7 +18,7 @@
             <label class="label">请求名称</label>
           </div>
           <div class="control">
-           {{ api.name }}
+            {{ api.name }}
           </div>
         </div>
         <div class="control is-horizontal">
@@ -24,7 +26,7 @@
             <label class="label">是否启用</label>
           </div>
           <div class="control">
-           {{ api.status }}
+            {{ api.status }}
           </div>
         </div>
         <div class="control is-horizontal">
@@ -80,7 +82,11 @@
       this.loadApi()
     },
 
-    computed: {},
+    computed: {
+      mockLink: function () {
+        return 'http://' + window.location.host + '/mock/' + this.$route.params.project_id + '/' + this.api.path
+      }
+    },
 
     methods: {
       loadApi () {
@@ -121,33 +127,5 @@
 
   .title {
     font-weight: bold;
-  }
-
-  .green {
-    background-color: #5eceb3;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .blue {
-    background-color: #4373d5;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .yellow {
-    background-color: #fadd6e;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .red {
-    background-color: #eb4c64;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .right {
-    float: right;
   }
 </style>
