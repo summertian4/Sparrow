@@ -50,7 +50,8 @@
             <label class="label">返回参数</label>
           </div>
           <div class="control">
-            <textarea class="textarea" v-model="api.responseJson" disabled></textarea>
+            <!--<textarea class="textarea" v-model="api.responseJson" disabled></textarea>-->
+            <json-editor class="jsoneditor" ref="editor" :json="api.responseJson" :editable="false"/>
           </div>
         </div>
       </div>
@@ -61,9 +62,12 @@
 <script>
   import {request} from '../network.js'
   import * as notification from '../notification.js'
+  import JsonEditor from './JsonEditor'
 
   export default {
-    components: {},
+    components: {
+      JsonEditor
+    },
 
     data () {
       return {
@@ -127,5 +131,9 @@
 
   .title {
     font-weight: bold;
+  }
+
+  .jsoneditor {
+    width: 100%;
   }
 </style>
