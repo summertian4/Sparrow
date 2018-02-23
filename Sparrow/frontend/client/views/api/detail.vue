@@ -50,7 +50,6 @@
             <label class="label">返回参数</label>
           </div>
           <div class="control">
-            <!--<textarea class="textarea" v-model="api.responseJson" disabled></textarea>-->
             <json-editor class="jsoneditor" ref="editor" :json="api.responseJson" :editable="false"/>
           </div>
         </div>
@@ -95,7 +94,10 @@
     methods: {
       loadApi () {
         request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
-          method: 'get'
+          method: 'get',
+          params: {
+            isOriginal: false
+          }
         }).then((data) => {
           this.api = data['api']
         }).catch((data) => {
