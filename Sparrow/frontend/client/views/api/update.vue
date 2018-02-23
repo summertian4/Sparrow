@@ -56,12 +56,9 @@
 
             <label class="label">返回数据</label>
             <p class="control  has-icon has-icon-right">
-              <textarea v-bind:class="{ 'is-danger': !verification.responseJson }" class="textarea" placeholder=""
-                        v-model.trim="api.responseJson"></textarea>
-              <span class="icon is-small" v-if="!verification.responseJson">
-               <i class="fa fa-warning"></i>
-              </span>
+              <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson"/>
               <span class="help is-danger" v-if="!verification.responseJson">{{ errorMessage.responseJson }}</span>
+
             </p>
 
             <p class="control">
@@ -79,9 +76,12 @@
   import qs from 'qs'
   import {request} from '../network.js'
   import * as notification from '../notification.js'
+  import JsonEditor from './JsonEditor'
 
   export default {
-    components: {},
+    components: {
+      JsonEditor
+    },
 
     data () {
       return {
@@ -102,7 +102,8 @@
           path: '',
           name: '',
           responseJson: ''
-        }
+        },
+        editorJson: {}
       }
     },
 
@@ -118,6 +119,8 @@
           method: 'get'
         }).then((data) => {
           this.api = data['api']
+          this.editorJson = JSON.parse(this.api.responseJson)
+          this.api.responseJson = this.editorJson
         }).catch((data) => {
           notification.toast({
             message: data['message'],
@@ -190,6 +193,10 @@
             })
           }
         })
+      },
+
+      inputResponseJson (newVal) {
+        this.api.responseJson = JSON.stringify(newVal)
       }
     }
   }

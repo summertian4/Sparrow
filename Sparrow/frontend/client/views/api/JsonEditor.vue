@@ -51,22 +51,23 @@
         if (this.onChange && this.editor) {
           this.onChange(this.editor.get())
         }
+      },
+      _editable (node) {
+        if (!node.path) {
+          console.log(this.editable)
+          return this.editable
+        }
       }
     },
     mounted () {
       const container = this.$refs.jsoneditor
-
       var options = {
         mode: 'code',
         modes: ['code', 'view'], // allowed modes
         onError: function (err) {
           console.log(err.toString())
         },
-        onEditable: function (node) {
-          if (!node.path) {
-            return this.editorable
-          }
-        },
+        onEditable: this._editable,
         onModeChange: function (newMode, oldMode) {
           console.log('Mode switched from', oldMode, 'to', newMode)
         },
