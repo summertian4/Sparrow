@@ -49,12 +49,16 @@
     methods: {
       _onChange () {
         if (this.onChange && this.editor) {
-          this.onChange(this.editor.get())
+          try {
+            this.$emit('verifyJson', true)
+            this.onChange(this.editor.get())
+          } catch (err) {
+            this.$emit('verifyJson', false)
+          }
         }
       },
       _editable (node) {
         if (!node.path) {
-          console.log(this.editable)
           return this.editable
         }
       }

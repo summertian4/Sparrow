@@ -56,9 +56,8 @@
 
             <label class="label">返回数据</label>
             <p class="control  has-icon has-icon-right">
-              <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson"/>
+              <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
               <span class="help is-danger" v-if="!verification.responseJson">{{ errorMessage.responseJson }}</span>
-
             </p>
 
             <p class="control">
@@ -114,13 +113,16 @@
     computed: {},
 
     methods: {
+      verifyJson (verification) {
+        this.errorMessage.responseJson = '格式错误'
+        this.verification.responseJson = verification
+      },
       loadApi () {
         request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
           method: 'get'
         }).then((data) => {
           this.api = data['api']
           this.editorJson = JSON.parse(this.api.responseJson)
-          this.api.responseJson = this.editorJson
         }).catch((data) => {
           notification.toast({
             message: data['message'],
@@ -197,6 +199,7 @@
 
       inputResponseJson (newVal) {
         this.api.responseJson = JSON.stringify(newVal)
+        console.log(this.jsonVerification)
       }
     }
   }
