@@ -93,6 +93,7 @@ class ApiAction:
     def detail(request, project_id, api_id):
         api = ApiDao.get_api_with_id(api_id=api_id)
         data = CommonData.response_data(Success, "Success")
+        api.responseJson = json.loads(api.responseJson)
         data['api'] = api.as_dict()
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 

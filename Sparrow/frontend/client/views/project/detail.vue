@@ -60,35 +60,4 @@
 </script>
 
 <style scoped>
-  .button {
-    width: 80px;
-  }
-
-  .green {
-    background-color: #5eceb3;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .blue {
-    background-color: #4373d5;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .yellow {
-    background-color: #fadd6e;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .red {
-    background-color: #eb4c64;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .right {
-    float: right;
-  }
 </style>

@@ -17,6 +17,12 @@
       json: {
         required: true
       },
+      editable: {
+        type: Boolean,
+        default: () => {
+          return true
+        }
+      },
       options: {
         type: Object,
         default: () => {
@@ -55,6 +61,11 @@
         modes: ['code', 'view'], // allowed modes
         onError: function (err) {
           console.log(err.toString())
+        },
+        onEditable: function (node) {
+          if (!node.path) {
+            return this.editorable
+          }
         },
         onModeChange: function (newMode, oldMode) {
           console.log('Mode switched from', oldMode, 'to', newMode)

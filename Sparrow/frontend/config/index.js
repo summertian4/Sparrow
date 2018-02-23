@@ -31,6 +31,13 @@ module.exports = {
         pathRewrite: {
           '^/frontend': 'frontend'
         }
+      },
+      '/mock': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/mock': 'mock'
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

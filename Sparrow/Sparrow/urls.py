@@ -26,10 +26,8 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', action.common_action.index, name='index'),
-    # path('error', action.error),
     path('api/list', ApiAction.list),
     path('api/update/<api_id>', ApiAction.update),
-    path('mock/api/<path>', action.common_action.dispatch),
     path('mock/<project_id>/<path:path>', action.common_action.mock),
 
     path('frontend/project/list', ProjectAction.list),
