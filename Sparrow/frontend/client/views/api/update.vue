@@ -7,12 +7,12 @@
           <div class="block">
             <label class="label">请求路径</label>
             <p class="control has-icon has-icon-right">
-              <input v-bind:class="{ 'is-danger': !verification.path }" class="input" type="text"
+              <input v-bind:class="{ 'is-danger': !verifications.path }" class="input" type="text"
                      placeholder="输入您的 API 相对路径" v-model.trim="api.path">
-              <span class="icon is-small" v-if="!verification.path">
+              <span class="icon is-small" v-if="!verifications.path">
                <i class="fa fa-warning"></i>
               </span>
-              <span class="help is-danger" v-if="!verification.path">{{ errorMessage.path }}</span>
+              <span class="help is-danger" v-if="!verifications.path">{{ errorMessage.path }}</span>
             </p>
             <label class="label">请求类型</label>
             <p class="control">
@@ -27,12 +27,12 @@
             </p>
             <label class="label">请求名称</label>
             <p class="control has-icon has-icon-right">
-              <input v-bind:class="{ 'is-danger': !verification.name }" class="input" type="text"
+              <input v-bind:class="{ 'is-danger': !verifications.name }" class="input" type="text"
                      placeholder="请求名称可以方便您快速找到 API" v-model="api.name">
-              <span class="icon is-small" v-if="!verification.name">
+              <span class="icon is-small" v-if="!verifications.name">
                <i class="fa fa-warning"></i>
               </span>
-              <span class="help is-danger" v-if="!verification.name">{{ errorMessage.name }}</span>
+              <span class="help is-danger" v-if="!verifications.name">{{ errorMessage.name }}</span>
             </p>
             <label class="label">是否启用</label>
             <p class="control">
@@ -57,7 +57,7 @@
             <label class="label">返回数据</label>
             <p class="control  has-icon has-icon-right">
               <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
-              <span class="help is-danger" v-if="!verification.responseJson">{{ errorMessage.responseJson }}</span>
+              <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
             </p>
 
             <p class="control">
@@ -92,7 +92,7 @@
           note: '',
           responseJson: ''
         },
-        verification: {
+        verifications: {
           path: true,
           name: true,
           responseJson: true
@@ -115,7 +115,8 @@
     methods: {
       verifyJson (verification) {
         this.errorMessage.responseJson = '格式错误'
-        this.verification.responseJson = verification
+        this.verifications.responseJson = verification
+        console.log(this.verifications.responseJson)
       },
       loadApi () {
         request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
@@ -140,9 +141,9 @@
       },
       verify (callback) {
         // 校验空串
-        for (var prop in this.verification) {
+        for (var prop in this.verifications) {
           if (this.isEmpty(this.api[prop])) {
-            this.verification[prop] = false
+            this.verifications[prop] = false
             this.errorMessage[prop] = '不能为空'
             callback(false)
             return
@@ -159,10 +160,16 @@
         }).then((data) => {
           var repeatability = data['repeatability']
           if (repeatability) {
-            this.verification.path = false
+            this.verifications.path = false
             this.errorMessage.path = '该路径的 API 已经存在'
           }
-          callback(!repeatability)
+          var finalResult = true
+          for (var value in this.verifications) {
+            if (this.verifications[value] === false) {
+              finalResult = false
+            }
+          }
+          callback(finalResult)
         }).catch((data) => {
           notification.toast({
             message: data['message'],
@@ -199,7 +206,6 @@
 
       inputResponseJson (newVal) {
         this.api.responseJson = JSON.stringify(newVal)
-        console.log(this.jsonVerification)
       }
     }
   }
