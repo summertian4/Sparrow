@@ -1,14 +1,6 @@
-from django.http import HttpResponse
-from django.shortcuts import render, render_to_response
 from backend.dao.api_dao import ApiDao
 from backend.dao.project_dao import ProjectDao
-import json
-from django.http import HttpResponseRedirect
 from Sparrow.forms import *
-import Sparrow._const
-from django.http import QueryDict
-from django.views.decorators.csrf import csrf_exempt
-from Sparrow.action.common_action import CommonData
 from backend.models import Api
 from Sparrow.action.common_action import *
 from django.forms.models import model_to_dict

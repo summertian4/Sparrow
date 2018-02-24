@@ -39,6 +39,11 @@ export default new Router({
       component: require('../views/api/detail')
     },
     {
+      name: '公共模板 / 添加',
+      path: '/template/create',
+      component: require('../views/template/create')
+    },
+    {
       name: 'Login',
       path: '/login',
       component: require('../views/auth/Login')

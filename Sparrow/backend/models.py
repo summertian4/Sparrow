@@ -28,7 +28,7 @@ class Api(models.Model, Dictable):
     name = models.CharField(max_length=128, null=True)
     note = models.CharField(max_length=512, null=True, default="")
     status = models.IntegerField(default=0)
-    responseJson = models.TextField(default="", blank=True, null=True)
+    responseJson = models.TextField(default="{}", blank=True, null=True)
 
     createTime = models.DateTimeField(auto_now_add=True)
     updateTime = models.DateTimeField(auto_now=True)
@@ -38,6 +38,21 @@ class Api(models.Model, Dictable):
         Disabled = 0
         Abled = 1
 
+class ResTemplate(models.Model, Dictable):
+    res_template_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=128, null=True)
+    note = models.CharField(max_length=512, null=True, default="")
+    mimeType = models.IntegerField(default=0)
+    responseJson = models.TextField(default="{}", blank=True, null=True)
+
+    createTime = models.DateTimeField(auto_now_add=True)
+    updateTime = models.DateTimeField(auto_now=True)
+
+    @unique
+    class MIMEType(Enum):
+        ApplicationJson = 0
+        TextPlain = 1
+        ImageJpeg = 2
 
 class Project(models.Model, Dictable):
     project_id = models.AutoField(primary_key=True)
@@ -45,6 +60,7 @@ class Project(models.Model, Dictable):
     note = models.CharField(max_length=512, null=True, default="")
     status = models.IntegerField(default=1)
     apis = models.ManyToManyField(Api)
+    responseTemplates = models.ManyToManyField(ResTemplate)
 
     createTime = models.DateTimeField(auto_now_add=True)
     updateTime = models.DateTimeField(auto_now=True)
