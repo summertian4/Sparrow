@@ -47,6 +47,7 @@ urlpatterns = [
     path('frontend/res_template/detail/<res_template_id>', ResTemplateAction.detail),
     path('frontend/res_template/create', ResTemplateAction.create),
     path('frontend/res_template/repeat_name_verification', ResTemplateAction.repeat_name_verification),
+    path('frontend/res_template/delete/<res_template_id>', ResTemplateAction.delete),
     # url(r'^api/', include('Sparrow.urls', namespace='api')),
     # url(r'^$', TemplateView.as_view(template_name="index.html")),
 ]

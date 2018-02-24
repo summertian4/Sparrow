@@ -1,5 +1,19 @@
 <template>
   <div>
+    <modal :visible="deleteTemplateModal.showModal" @close="close">
+      <div class="box">
+        <article>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>删除该模板 <strong class="is-danger">{{ template.name }}</strong> ？</strong>
+              </p>
+              <button class="button is-danger is-fullwidth" @click="deleteTemplate">确认删除</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </modal>
     <article class="tile is-child box">
       <h1 class="title">{{ template.name }}
       </h1>
@@ -28,6 +42,16 @@
             <textarea class="textarea" v-model="template.note" disabled></textarea>
           </div>
         </div>
+        <div>
+          <p class="control right">
+            <button class="button is-primary" type="submit">编辑</button>
+          </p>
+          <p class="control right">
+            <button class="button is-danger" v-on:click="deleteTemplateModal.showModal=true">删除</button>
+          </p>
+          <p class="blank">
+          </p>
+        </div>
       </div>
     </article>
   </div>
@@ -37,10 +61,12 @@
   import {request} from '../network.js'
   import * as notification from '../notification.js'
   import JsonEditor from '../components/JsonEditor'
+  import {Modal} from 'vue-bulma-modal'
 
   export default {
     components: {
-      JsonEditor
+      JsonEditor,
+      Modal
     },
 
     data () {
@@ -50,6 +76,9 @@
           type: 0,
           note: '',
           responseJson: ''
+        },
+        deleteTemplateModal: {
+          showModal: false
         }
       }
     },
@@ -61,6 +90,10 @@
     computed: {},
 
     methods: {
+      close () {
+        this.deleteTemplateModal.showModal = false
+      },
+
       loadApi () {
         request('/frontend/res_template/detail/' + this.$route.params.id, {
           method: 'get',
@@ -76,6 +109,31 @@
             duration: 2000
           })
         })
+      },
+
+      deleteTemplate () {
+        request('/frontend/res_template/delete/' + this.$route.params.id, {
+          method: 'get'
+        }).then((data) => {
+          this.close()
+          notification.toast({
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          setTimeout(this.jumpToTemplateList, 100)
+        }).catch((data) => {
+          this.close()
+          notification.toast({
+            message: data['message'],
+            type: 'failed',
+            duration: 2000
+          })
+        })
+      },
+
+      jumpToTemplateList () {
+        this.$router.push({path: '/template'})
       }
     }
   }
@@ -100,11 +158,24 @@
     margin-bottom: 40px;
   }
 
+  .right {
+    float: right;
+  }
+
   .title {
     font-weight: bold;
   }
 
   .jsoneditor {
     width: 100%;
+  }
+
+  .blank {
+    height: 30px;
+  }
+
+  .button {
+    width: 80px;
+    margin-left: 10px;
   }
 </style>
