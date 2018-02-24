@@ -113,11 +113,6 @@
     computed: {},
 
     methods: {
-      verifyJson (verification) {
-        this.errorMessage.responseJson = '格式错误'
-        this.verifications.responseJson = verification
-        console.log(this.verifications.responseJson)
-      },
       loadApi () {
         request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
           method: 'get'
@@ -206,6 +201,12 @@
 
       inputResponseJson (newVal) {
         this.api.responseJson = JSON.stringify(newVal)
+      },
+
+      verifyJson (verification) {
+        this.errorMessage.responseJson = '格式错误'
+        this.verifications.responseJson = verification
+        console.log(this.verifications.responseJson)
       }
     }
   }

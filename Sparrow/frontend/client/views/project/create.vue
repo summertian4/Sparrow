@@ -7,12 +7,12 @@
           <div class="block">
             <label class="label">项目名称</label>
             <p class="control has-icon has-icon-right">
-              <input v-bind:class="{ 'is-danger': !verification.name }" class="input" type="text"
+              <input v-bind:class="{ 'is-danger': !verifications.name }" class="input" type="text"
                      placeholder="请输入您的项目名称" v-model="project.name">
-              <span class="icon is-small" v-if="!verification.name">
+              <span class="icon is-small" v-if="!verifications.name">
                <i class="fa fa-warning"></i>
               </span>
-              <span class="help is-danger" v-if="!verification.name">{{ errorMessage.name }}</span>
+              <span class="help is-danger" v-if="!verifications.name">{{ errorMessage.name }}</span>
             </p>
             <label class="label">备注</label>
             <p class="control">
@@ -46,7 +46,7 @@
           status: 1,
           note: ''
         },
-        verification: {
+        verifications: {
           name: true
         },
         errorMessage: {
@@ -71,9 +71,9 @@
       },
       verify (callback) {
         // 校验空串
-        for (var prop in this.verification) {
+        for (var prop in this.verifications) {
           if (this.isEmpty(this.project[prop])) {
-            this.verification[prop] = false
+            this.verifications[prop] = false
             this.errorMessage[prop] = '不能为空'
             callback(false)
             return
@@ -88,7 +88,7 @@
         }).then((data) => {
           var repeatability = data['repeatability']
           if (repeatability) {
-            this.verification.name = false
+            this.verifications.name = false
             this.errorMessage.name = '该名称的项目已经存在'
           }
           callback(!repeatability)
