@@ -30,7 +30,7 @@ const state = {
       component: lazyLoading('project', true)
     },
     {
-      name: '模板',
+      name: '公共返回模板',
       path: '/template',
       meta: {
         icon: 'fa-copy',

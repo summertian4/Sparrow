@@ -61,7 +61,7 @@
 <script>
   import {request} from '../network.js'
   import * as notification from '../notification.js'
-  import JsonEditor from './JsonEditor'
+  import JsonEditor from '../components/JsonEditor'
 
   export default {
     components: {

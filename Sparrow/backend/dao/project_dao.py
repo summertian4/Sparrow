@@ -7,13 +7,13 @@ class ProjectDao:
         return projects
 
     def get_all_project_list():
-        prjects = list(ProjectDao.get_all_projects().values('project_id',
+        projects = list(ProjectDao.get_all_projects().values('project_id',
                                                             'name',
                                                             'note',
                                                             'status',
                                                             'createTime',
                                                             'updateTime'))
-        return prjects
+        return projects
 
     def get_project_with_id(project_id):
         try:

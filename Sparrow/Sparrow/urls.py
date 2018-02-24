@@ -20,15 +20,11 @@ from django.conf.urls import include
 from Sparrow import action
 from Sparrow.action.api_action import ApiAction
 from Sparrow.action.project_action import ProjectAction
-import Sparrow.action.common_action
-from django.views.generic import TemplateView
+from Sparrow.action.res_template_action import ResTemplateAction
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', action.common_action.index, name='index'),
-    path('api/list', ApiAction.list),
-    path('api/update/<api_id>', ApiAction.update),
-    path('mock/<project_id>/<path:path>', action.common_action.mock),
 
     path('frontend/project/list', ProjectAction.list),
     path('frontend/project/detail/<project_id>', ProjectAction.detail),
@@ -36,12 +32,20 @@ urlpatterns = [
     path('frontend/project/update/<project_id>', ProjectAction.update),
     path('frontend/project/repeat_name_verification', ProjectAction.repeat_name_verification),
     path('frontend/project/delete', ProjectAction.delete),
+
+    path('api/list', ApiAction.list),
+    path('api/update/<api_id>', ApiAction.update),
+    path('mock/<project_id>/<path:path>', action.common_action.mock),
     path('frontend/project/<project_id>/api/create', ApiAction.create),
     path('frontend/project/<project_id>/api/list', ApiAction.list),
     path('frontend/project/<project_id>/api/repeat_name_verification', ApiAction.repeat_name_verification),
     path('frontend/project/<project_id>/api/delete/<api_id>', ApiAction.delete),
     path('frontend/project/<project_id>/api/detail/<api_id>', ApiAction.detail),
     path('frontend/project/<project_id>/api/update/<api_id>', ApiAction.update),
+
+    path('frontend/res_template/list', ResTemplateAction.list),
+    path('frontend/res_template/create', ResTemplateAction.create),
+    path('frontend/res_template/repeat_name_verification', ResTemplateAction.repeat_name_verification),
     # url(r'^api/', include('Sparrow.urls', namespace='api')),
     # url(r'^$', TemplateView.as_view(template_name="index.html")),
 ]
