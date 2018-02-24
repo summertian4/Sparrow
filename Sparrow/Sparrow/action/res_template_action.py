@@ -19,10 +19,28 @@ class ResTemplateAction:
         data["res_templates"] = resTemplates
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
-    def detail(request, project_id):
-        project = ResTemplateDao.get_project_with_id(project_id)
+    def detail(request, res_template_id):
+        isOriginal = True
+        if 'isOriginal' in request.GET.keys():
+            isOriginal = False
+        res_template = ResTemplateDao.get_res_template_with_id(res_template_id)
+
+        if isOriginal == False:
+            res_template.responseJson = json.loads(res_template.responseJson)
+        dic = model_to_dict(res_template)
+        if res_template.mimeType == ResTemplate.MIMEType.ApplicationJson:
+            dic['mimeType'] = "application/json"
+        elif res_template.mimeType == ResTemplate.MIMEType.TextPlain:
+            dic['mimeType'] = "text/plain"
+        elif res_template.mimeType == ResTemplate.MIMEType.ImageJpeg:
+            dic['mimeType'] = "image/jpeg"
+
+        dic['mimeType'] = "image/jpeg"
+        print(dic['mimeType'])
+
         data = CommonData.response_data(Success, "Success")
-        data["project"] = model_to_dict(project)
+        data["res_template"] = dic
+
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
