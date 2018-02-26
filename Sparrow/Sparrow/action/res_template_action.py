@@ -120,13 +120,9 @@ class ResTemplateAction:
             data = CommonData.response_data(RequetMethodError, "POST is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-    def delete(request):
+    def delete(request, res_template_id):
         if request.method == 'GET':
-            project_id = request.GET['project_id']
-            if project_id is None:
-                data = CommonData.response_data(RequetParamsError, "project_id is None")
-                return HttpResponse(json.dumps(data), content_type="application/json")
-            succesed = ResTemplateDao.delete(project_id)
+            succesed = ResTemplateDao.delete(res_template_id)
             if succesed:
                 data = CommonData.response_data(Success, "Success")
                 return HttpResponse(json.dumps(data), content_type="application/json")
