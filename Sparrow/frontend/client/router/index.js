@@ -49,6 +49,11 @@ export default new Router({
       component: require('../views/template/detail')
     },
     {
+      name: '公共模板 / 更新',
+      path: '/template/update/:id',
+      component: require('../views/template/update')
+    },
+    {
       name: 'Login',
       path: '/login',
       component: require('../views/auth/Login')

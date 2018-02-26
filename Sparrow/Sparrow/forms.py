@@ -30,5 +30,11 @@ class ProjectUpateForm(forms.Form):
 class ResTemplateCreateForm(forms.Form):
     name = forms.CharField(max_length=128)
     note = forms.CharField(max_length=512, required=False)
-    type = forms.IntegerField()
+    mimeType = forms.IntegerField()
+    responseJson = forms.CharField(widget=forms.Textarea())
+
+class ResTemplateUpdateForm(forms.Form):
+    name = forms.CharField(max_length=128)
+    note = forms.CharField(max_length=512, required=False)
+    mimeType = forms.IntegerField()
     responseJson = forms.CharField(widget=forms.Textarea())

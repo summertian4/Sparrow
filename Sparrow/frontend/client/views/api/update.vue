@@ -62,7 +62,6 @@
 
             <p class="control">
               <button class="button is-primary right" type="submit">更新</button>
-              <button class="button is-link right">取消</button>
             </p>
           </div>
         </form>
@@ -127,6 +126,7 @@
           })
         })
       },
+
       isEmpty (obj) {
         if (obj.length === 0 || obj.length === '' || obj === null) {
           return true
