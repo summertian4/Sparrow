@@ -57,10 +57,13 @@
             <label class="label">返回数据</label>
             <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
             <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
-            <p class="control">
-              <button class="button is-primary right" type="submit">确认</button>
-              <button class="button is-link right">取消</button>
-            </p>
+            <div>
+              <p class="control right">
+                <button class="button is-primary right" type="submit">确认</button>
+              </p>
+              <p class="blank">
+              </p>
+            </div>
           </div>
         </form>
       </article>
@@ -202,11 +205,17 @@
 </script>
 
 <style scoped>
-  .button {
-    width: 80px;
-  }
-
   .right {
     float: right;
+  }
+
+  .blank {
+    margin-top: 10px;
+    height: 30px;
+  }
+
+  .button {
+    width: 80px;
+    margin-left: 10px;
   }
 </style>
