@@ -1,5 +1,19 @@
 <template>
   <div>
+    <modal :visible="deleteAPIModal.showModal" @close="close">
+      <div class="box">
+        <article>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>删除该 API <strong class="is-danger">{{ api.name }}</strong> ？</strong>
+              </p>
+              <button class="button is-danger is-fullwidth" @click="deleteAPI">确认删除</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </modal>
     <article class="tile is-child box">
       <h1 class="title">{{ api.path }}
         <a :href="mockLink" target="_blank">[MOCK]</a>
@@ -53,6 +67,16 @@
             <json-editor class="jsoneditor" ref="editor" :json="api.responseJson" :editable="false"/>
           </div>
         </div>
+        <div>
+          <p class="control right">
+            <button class="button is-primary" v-on:click="jumpToAPIUpdate">编辑</button>
+          </p>
+          <p class="control right">
+            <button class="button is-danger" v-on:click="deleteAPIModal.showModal=true">删除</button>
+          </p>
+          <p class="blank">
+          </p>
+        </div>
       </div>
     </article>
   </div>
@@ -62,10 +86,12 @@
   import {request} from '../network.js'
   import * as notification from '../notification.js'
   import JsonEditor from '../components/JsonEditor'
+  import {Modal} from 'vue-bulma-modal'
 
   export default {
     components: {
-      JsonEditor
+      JsonEditor,
+      Modal
     },
 
     data () {
@@ -77,6 +103,9 @@
           status: 1,
           note: '',
           responseJson: ''
+        },
+        deleteAPIModal: {
+          showModal: false
         }
       }
     },
@@ -92,6 +121,9 @@
     },
 
     methods: {
+      close () {
+        this.deleteAPIModal.showModal = false
+      },
       loadApi () {
         request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
           method: 'get',
@@ -107,35 +139,58 @@
             duration: 2000
           })
         })
+      },
+
+      deleteAPI () {
+        request('/frontend/project/' + this.$route.params.project_id + '/api/delete/' + this.$route.params.api_id)
+          .then((data) => {
+            this.deleteAPIModal.showModal = false
+            notification.toast({
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            setTimeout(this.jumpToAPIList, 100)
+          })
+          .catch((data) => {
+            notification.toast({
+              message: data['message'],
+              type: 'danger',
+              duration: 2000
+            })
+          })
+      },
+
+      jumpToAPIUpdate () {
+        this.$router.push({path: '/project/' + this.$route.params.project_id + '/api/update/' + this.$route.params.api_id})
+      },
+
+      jumpToAPIList () {
+        this.$router.push({path: '/project/detail/' + this.$route.params.project_id})
       }
     }
   }
 </script>
 
 <style scoped>
-  hr.gradient-green {
-    border: 0;
-    height: 1px;
-    background: #333;
-    background-image: linear-gradient(to right, #ddd, #5eceb3, #ddd);
-    margin-top: 40px;
-    margin-bottom: 40px;
-  }
-
-  hr.gradient-red {
-    border: 0;
-    height: 1px;
-    background: #333;
-    background-image: linear-gradient(to right, #ddd, #eb4c64, #ddd);
-    margin-top: 40px;
-    margin-bottom: 40px;
-  }
-
   .title {
     font-weight: bold;
   }
 
+  .blank {
+    height: 30px;
+  }
+
+  .right {
+    float: right;
+  }
+
   .jsoneditor {
     width: 100%;
+  }
+
+  .button {
+    width: 80px;
+    margin-left: 10px;
   }
 </style>

@@ -28,15 +28,6 @@ class ResTemplateAction:
         if isOriginal == False:
             res_template.responseJson = json.loads(res_template.responseJson)
         dic = model_to_dict(res_template)
-        if res_template.mimeType == ResTemplate.MIMEType.ApplicationJson:
-            dic['mimeType'] = "application/json"
-        elif res_template.mimeType == ResTemplate.MIMEType.TextPlain:
-            dic['mimeType'] = "text/plain"
-        elif res_template.mimeType == ResTemplate.MIMEType.ImageJpeg:
-            dic['mimeType'] = "image/jpeg"
-
-        dic['mimeType'] = "image/jpeg"
-        print(dic['mimeType'])
 
         data = CommonData.response_data(Success, "Success")
         data["res_template"] = dic
@@ -69,14 +60,15 @@ class ResTemplateAction:
             return HttpResponse(json.dumps(data), content_type="application/json")
 
     @csrf_exempt
-    def update(request, project_id):
+    def update(request, res_template_id):
         if request.method == CommonData.Method.POST.value:
-            form = ProjectUpateForm(data=request.POST)
+            form = ResTemplateUpdateForm(data=request.POST)
             if form.is_valid():
-                model = ResTemplateDao.get_project_with_id(project_id)
+                model = ResTemplateDao.get_res_template_with_id(res_template_id)
                 model.name = form.clean().get('name')
                 model.note = form.clean().get('note')
-                model.status = form.clean().get('status')
+                model.mimeType = form.clean().get('mimeType')
+                model.responseJson = form.clean().get('responseJson')
                 result = ResTemplateDao.update(model)
 
                 if result is False:
@@ -107,9 +99,9 @@ class ResTemplateAction:
                 data['repeatability'] = False
             else:
                 data['resTemplate'] = resTemplate.as_dict()
-                if 'project_id' in request.GET.keys():
-                    project_id = request.GET['project_id']
-                    if str(resTemplate.project_id) == str(project_id):
+                if 'res_template_id' in request.GET.keys():
+                    res_template_id = request.GET['res_template_id']
+                    if str(resTemplate.res_template_id) == str(res_template_id):
                         data['repeatability'] = False
                     else:
                         data['repeatability'] = True

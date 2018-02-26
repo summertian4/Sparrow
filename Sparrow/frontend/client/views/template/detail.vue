@@ -22,8 +22,14 @@
           <div class="control-label">
             <label class="label">MIME 类型</label>
           </div>
-          <div class="control is-grouped">
-            {{ template.mimeType }}
+          <div class="control is-grouped" v-if="template.mimeType === 0">
+            application/json
+          </div>
+          <div class="control is-grouped" v-if="template.mimeType === 1">
+            text/plain
+          </div>
+          <div class="control is-grouped" v-if="template.mimeType === 2">
+            image/jpeg
           </div>
         </div>
         <div class="control is-horizontal">
@@ -44,7 +50,7 @@
         </div>
         <div>
           <p class="control right">
-            <button class="button is-primary" type="submit">编辑</button>
+            <button class="button is-primary" v-on:click="jumpToTemplateUpdate">编辑</button>
           </p>
           <p class="control right">
             <button class="button is-danger" v-on:click="deleteTemplateModal.showModal=true">删除</button>
@@ -84,7 +90,7 @@
     },
 
     created () {
-      this.loadApi()
+      this.loadTemplate()
     },
 
     computed: {},
@@ -94,7 +100,7 @@
         this.deleteTemplateModal.showModal = false
       },
 
-      loadApi () {
+      loadTemplate () {
         request('/frontend/res_template/detail/' + this.$route.params.id, {
           method: 'get',
           params: {
@@ -134,6 +140,10 @@
 
       jumpToTemplateList () {
         this.$router.push({path: '/template'})
+      },
+
+      jumpToTemplateUpdate () {
+        this.$router.push({path: '/template/update/' + this.$route.params.id})
       }
     }
   }
