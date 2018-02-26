@@ -189,7 +189,6 @@
       verifyJson (verification) {
         this.errorMessage.responseJson = '格式错误'
         this.verifications.responseJson = verification
-        console.log(this.verifications.responseJson)
       }
     }
   }

@@ -38,6 +38,7 @@ class ResTemplateAction:
     def create(request):
         if request.method == CommonData.Method.POST.value:
             form = ResTemplateCreateForm(data=request.POST)
+            print(form)
             if form.is_valid():
                 model = ResTemplate()
                 model.name = form.clean().get('name')
@@ -91,8 +92,6 @@ class ResTemplateAction:
                 return HttpResponse(json.dumps(data), content_type="application/json")
             name = request.GET['name']
             resTemplate = ResTemplateDao.get_res_template_with_name(name)
-
-            print(resTemplate)
 
             data = CommonData.response_data(Success, "Success")
             if resTemplate is None:
