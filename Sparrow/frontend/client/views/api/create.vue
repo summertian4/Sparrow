@@ -8,7 +8,7 @@
             <label class="label">请求路径</label>
             <p class="control has-icon has-icon-right">
               <input v-bind:class="{ 'is-danger': !verifications.path }" class="input" type="text"
-                     placeholder="输入您的 API 相对路径" v-model.trim="api.path">
+                     placeholder="输入您的 API 相对路径" v-model.trim="api.path" v-on:input="verifications.path=true">
               <span class="icon is-small" v-if="!verifications.path">
                <i class="fa fa-warning"></i>
               </span>
@@ -28,7 +28,7 @@
             <label class="label">请求名称</label>
             <p class="control has-icon has-icon-right">
               <input v-bind:class="{ 'is-danger': !verifications.name }" class="input" type="text"
-                     placeholder="请求名称可以方便您快速找到 API" v-model="api.name">
+                     placeholder="请求名称可以方便您快速找到 API" v-model="api.name" v-on:input="verifications.name=true">
               <span class="icon is-small" v-if="!verifications.name">
                <i class="fa fa-warning"></i>
               </span>
@@ -57,10 +57,13 @@
             <label class="label">返回数据</label>
             <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
             <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
-            <p class="control">
-              <button class="button is-primary right" type="submit">确认</button>
-              <button class="button is-link right">取消</button>
-            </p>
+            <div>
+              <p class="control right">
+                <button class="button is-primary right" type="submit">确认</button>
+              </p>
+              <p class="blank">
+              </p>
+            </div>
           </div>
         </form>
       </article>
@@ -144,8 +147,15 @@
           if (repeatability) {
             this.verifications.path = false
             this.errorMessage.path = '该请求路径的 API 已经存在'
+            callback(false)
           }
-          callback(!repeatability)
+          var finalResult = true
+          for (var value in this.verifications) {
+            if (this.verifications[value] === false) {
+              finalResult = false
+            }
+          }
+          callback(finalResult)
         }).catch((data) => {
           notification.toast({
             message: data['message'],
@@ -189,18 +199,23 @@
       verifyJson (verification) {
         this.errorMessage.responseJson = '格式错误'
         this.verifications.responseJson = verification
-        console.log(this.verifications.responseJson)
       }
     }
   }
 </script>
 
 <style scoped>
-  .button {
-    width: 80px;
-  }
-
   .right {
     float: right;
+  }
+
+  .blank {
+    margin-top: 10px;
+    height: 30px;
+  }
+
+  .button {
+    width: 80px;
+    margin-left: 10px;
   }
 </style>

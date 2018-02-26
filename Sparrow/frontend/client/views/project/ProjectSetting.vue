@@ -45,7 +45,7 @@
               <label class="label">项目名称</label>
               <p class="control has-icon has-icon-right">
                 <input v-bind:class="{ 'is-danger': !verifications.name }" class="input" type="text"
-                       placeholder="请输入您的项目名称" v-model.trim="project.name">
+                       placeholder="请输入您的项目名称" v-model.trim="project.name" v-on:input="verifications.name=true">
                 <span class="icon is-small" v-if="!verifications.name">
                <i class="fa fa-warning"></i>
               </span>
@@ -155,12 +155,19 @@
             name: this.project.name
           }
         }).then((data) => {
-          var exist = data['exist']
-          if (exist) {
+          var repeatability = data['repeatability']
+          if (repeatability) {
             this.verifications.name = false
             this.errorMessage.name = '该名称的项目已经存在'
+            callback(false)
           }
-          callback(!exist)
+          var finalResult = true
+          for (var value in this.verifications) {
+            if (this.verifications[value] === false) {
+              finalResult = false
+            }
+          }
+          callback(finalResult)
         }).catch((data) => {
           notification.toast({
             message: data['message'],

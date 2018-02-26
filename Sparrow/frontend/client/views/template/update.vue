@@ -8,7 +8,7 @@
             <label class="label">模板名称</label>
             <p class="control has-icon has-icon-right">
               <input v-bind:class="{ 'is-danger': !verifications.name }" class="input" type="text"
-                     placeholder="请输入您的模板名称" v-model="template.name">
+                     placeholder="请输入您的模板名称" v-model="template.name" v-on:input="verifications.name=true">
               <span class="icon is-small" v-if="!verifications.name">
                <i class="fa fa-warning"></i>
               </span>
@@ -29,6 +29,7 @@
               <textarea class="textarea" placeholder="请输入您的备注" v-model.trim="template.note"></textarea>
             </p>
             <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
+            <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
             <div>
               <p class="control right">
                 <button class="button is-primary right" type="submit">确认</button>
@@ -65,11 +66,13 @@
           responseJson: '{}'
         },
         verifications: {
-          name: true
+          name: true,
+          responseJson: true
         },
         errorMessage: {
           name: '',
-          modal: ''
+          modal: '',
+          responseJson: ''
         },
         editorJson: {}
       }
@@ -87,7 +90,7 @@
           method: 'get'
         }).then((data) => {
           this.template = data['res_template']
-          console.log(this.template)
+          this.editorJson = JSON.parse(this.template.responseJson)
         }).catch((data) => {
           notification.toast({
             message: data['message'],
@@ -126,8 +129,15 @@
           if (repeatability) {
             this.verifications.name = false
             this.errorMessage.name = '该名称的项目已经存在'
+            callback(false)
           }
-          callback(!repeatability)
+          var finalResult = true
+          for (var value in this.verifications) {
+            if (this.verifications[value] === false) {
+              finalResult = false
+            }
+          }
+          callback(finalResult)
         }).catch((data) => {
           notification.toast({
             message: data['message'],
@@ -163,12 +173,12 @@
       },
 
       inputResponseJson (newVal) {
-        this.api.responseJson = JSON.stringify(newVal)
+        this.template.responseJson = JSON.stringify(newVal)
       },
+
       verifyJson (verification) {
         this.errorMessage.responseJson = '格式错误'
         this.verifications.responseJson = verification
-        console.log(this.verifications.responseJson)
       }
     }
   }
