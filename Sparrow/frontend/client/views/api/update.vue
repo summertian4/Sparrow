@@ -144,6 +144,7 @@
             return
           }
         }
+
         // 同名校验
         request('/frontend/project/' + this.$route.params.project_id + '/api/repeat_name_verification', {
           method: 'get',
@@ -157,6 +158,7 @@
           if (repeatability) {
             this.verifications.path = false
             this.errorMessage.path = '该路径的 API 已经存在'
+            callback(false)
           }
           var finalResult = true
           for (var value in this.verifications) {

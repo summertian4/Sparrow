@@ -142,8 +142,8 @@
         }).then((data) => {
           var repeatability = data['repeatability']
           if (repeatability) {
-            this.verifications.name = false
-            this.errorMessage.name = '该请求路径的 API 已经存在'
+            this.verifications.path = false
+            this.errorMessage.path = '该请求路径的 API 已经存在'
           }
           callback(!repeatability)
         }).catch((data) => {
