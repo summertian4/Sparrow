@@ -18,7 +18,7 @@
           <slot></slot>
         </div>
       </div>
-      <button class="modal-close" @click="deactive" v-if="true"></button>
+      <button class="modal-close" @click="deactive"></button>
     </div>
   </transition>
 </template>

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <popup-view :visible="true" @close="closeTemplateChooser">
+      <template-chooser></template-chooser>
+    </popup-view>
     <div class="tile is-ancestor">
       <article class="tile is-child box">
         <form @submit.prevent="submit">
@@ -76,10 +79,14 @@
   import {request} from '../network.js'
   import * as notification from '../notification.js'
   import JsonEditor from '../components/JsonEditor'
+  import PopupView from '../components/PopupView'
+  import TemplateChooser from './TemplateChooser'
 
   export default {
     components: {
-      JsonEditor
+      JsonEditor,
+      PopupView,
+      TemplateChooser
     },
 
     data () {
@@ -102,9 +109,6 @@
           name: '',
           responseJson: ''
         },
-        response: {
-          showModal: true
-        },
         editorJson: {}
       }
     },
@@ -115,9 +119,10 @@
     computed: {},
 
     methods: {
-      close () {
-        this.response.showModal = false
+      closeTemplateChooser () {
+
       },
+
       isEmpty (obj) {
         if (obj.length === 0 || obj.length === '' || obj === null) {
           return true

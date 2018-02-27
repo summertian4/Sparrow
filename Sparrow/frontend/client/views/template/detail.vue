@@ -79,7 +79,7 @@
       return {
         template: {
           name: '',
-          type: 0,
+          mimeType: 0,
           note: '',
           responseJson: ''
         },

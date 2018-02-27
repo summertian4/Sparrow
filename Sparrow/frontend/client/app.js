@@ -3,12 +3,12 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueAuth from '@websanova/vue-auth'
 import NProgress from 'vue-nprogress'
-import { sync } from 'vuex-router-sync'
+import {sync} from 'vuex-router-sync'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import * as filters from './filters'
-import { TOGGLE_SIDEBAR } from 'vuex-store/mutation-types'
+import {TOGGLE_SIDEBAR} from 'vuex-store/mutation-types'
 import VueCookie from 'vue-cookie'
 
 Vue.router = router
@@ -30,8 +30,8 @@ Vue.use(VueAuth, {
   },
   http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
-  loginData: { url: 'http://localhost:6789/login', fetchUser: false },
-  refreshData: { enabled: false }
+  loginData: {url: 'http://localhost:6789/login', fetchUser: false},
+  refreshData: {enabled: false}
 })
 
 Vue.use(NProgress)
@@ -41,9 +41,9 @@ Vue.config.devtools = true
 
 sync(store, router)
 
-const nprogress = new NProgress({ parent: '.nprogress-container' })
+const nprogress = new NProgress({parent: '.nprogress-container'})
 
-const { state } = store
+const {state} = store
 
 router.beforeEach((route, redirect, next) => {
   if (state.app.device.isMobile && state.app.sidebar.opened) {
@@ -63,4 +63,4 @@ const app = new Vue({
   ...App
 })
 
-export { app, router, store }
+export {app, router, store}
