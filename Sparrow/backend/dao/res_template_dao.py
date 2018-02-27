@@ -5,21 +5,26 @@ import datetime
 class ResTemplateDao:
     def create(model):
         resTemplate = ResTemplate.objects.create(name=model.name,
-                                                           note=model.note,
-                                                           mimeType=model.mimeType,
-                                                           responseJson=model.responseJson)
+                                                 note=model.note,
+                                                 mimeType=model.mimeType,
+                                                 responseJson=model.responseJson)
         return resTemplate
 
-    def get_all_res_templates():
-        resTemplates = ResTemplate.objects.all()
+    def get_all_res_templates(offset, limit):
+        resTemplates = ResTemplate.objects.all().order_by('-updateTime')[offset: offset + limit].values('res_template_id',
+                                                                               'name',
+                                                                               'note',
+                                                                               'mimeType',
+                                                                               'responseJson',
+                                                                               'updateTime')
         return resTemplates
 
-    def get_all_res_template_list():
-        resTemplates = list(ResTemplateDao.get_all_res_templates().values('res_template_id',
-                                                                           'name',
-                                                                           'note',
-                                                                           'mimeType',
-                                                                           'responseJson'))
+    def get_all_res_template_count():
+        result = ResTemplate.objects.all().values('res_template_id').count()
+        return result
+
+    def get_all_res_template_list(offset, limit):
+        resTemplates = list(ResTemplateDao.get_all_res_templates(offset, limit))
         return resTemplates
 
     def get_res_template_with_id(id):
