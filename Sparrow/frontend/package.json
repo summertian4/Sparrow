@@ -8,7 +8,7 @@
   "author": {
     "name": "小鱼周凌宇",
     "email": "coderfish@163.com",
-    "url": "fundon.me"
+    "url": "zhoulingyu.com"
   },
   "keywords": [
     "mock",
@@ -116,6 +116,8 @@
     "webpack-dev-middleware": "^1.9.0",
     "webpack-hot-middleware": "^2.14.0",
     "webpack-merge": "^4.0.0",
-    "jsoneditor": "^5.13.3"
+    "jsoneditor": "^5.13.3",
+    "element-pagination": "^2.0.0",
+    "element-theme-chalk": "^2.2.0"
   }
 }

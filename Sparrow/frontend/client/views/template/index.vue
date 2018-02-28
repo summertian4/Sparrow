@@ -55,7 +55,7 @@
       loadTemplates () {
         request('/frontend/res_template/list')
           .then((data) => {
-            this.templates = data['res_templates']
+            this.templates = data['templates_data']['res_templates']
           })
           .catch((data) => {
             notification.toast({

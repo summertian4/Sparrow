@@ -37,7 +37,7 @@
             <label class="label">返回参数</label>
           </div>
           <div class="control">
-            <json-editor class="jsoneditor" ref="editor" :json="template.responseJson" :editable="false"/>
+            <json-editor class="jsoneditor" ref="editor" :json="template.responseJson" :editable="false"></json-editor>
           </div>
         </div>
         <div class="control is-horizontal">
@@ -79,7 +79,7 @@
       return {
         template: {
           name: '',
-          type: 0,
+          mimeType: 0,
           note: '',
           responseJson: ''
         },

@@ -12,11 +12,26 @@ RequetParamsError = 1003
 MissingParametersError = 1004
 Success = 200
 
+
 class ResTemplateAction:
     def list(request):
-        resTemplates = ResTemplateDao.get_all_res_template_list()
+        limit = 10
+        page = 1
+        if 'limit' in request.GET.keys():
+            limit = int(request.GET['limit'])
+        if 'current_page' in request.GET.keys():
+            page = int(request.GET['current_page'])
+
+        offset = (page - 1) * limit
+        resTemplates = ResTemplateDao.get_all_res_template_list(offset, limit)
+
         data = CommonData.response_data(Success, "Success")
-        data["res_templates"] = resTemplates
+
+        count = ResTemplateDao.get_all_res_template_count()
+        data["templates_data"] = {"res_templates": resTemplates,
+                                  "current_page": page,
+                                  "total": count,
+                                  "limit": limit}
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     def detail(request, res_template_id):
@@ -38,7 +53,6 @@ class ResTemplateAction:
     def create(request):
         if request.method == CommonData.Method.POST.value:
             form = ResTemplateCreateForm(data=request.POST)
-            print(form)
             if form.is_valid():
                 model = ResTemplate()
                 model.name = form.clean().get('name')

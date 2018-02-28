@@ -1,5 +1,8 @@
 <template>
   <div>
+    <popup-view :visible="templateChooser.show" @close="templateChooser.show=false">
+      <template-chooser @choose-template="chooseTemplate"></template-chooser>
+    </popup-view>
     <div class="tile is-ancestor">
       <article class="tile is-child box">
         <form @submit.prevent="submit">
@@ -55,7 +58,11 @@
             </p>
 
             <label class="label">返回数据</label>
-            <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
+            <p class="control">
+              <button class="button is-primary" v-on:click="templateChooser.show=true">从模板中选择</button>
+            </p>
+            <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson"
+                         v-on:verifyJson="verifyJson"></json-editor>
             <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
             <div>
               <p class="control right">
@@ -76,10 +83,14 @@
   import {request} from '../network.js'
   import * as notification from '../notification.js'
   import JsonEditor from '../components/JsonEditor'
+  import PopupView from '../components/PopupView'
+  import TemplateChooser from './TemplateChooser'
 
   export default {
     components: {
-      JsonEditor
+      JsonEditor,
+      PopupView,
+      TemplateChooser
     },
 
     data () {
@@ -102,10 +113,10 @@
           name: '',
           responseJson: ''
         },
-        response: {
-          showModal: true
-        },
-        editorJson: {}
+        editorJson: {},
+        templateChooser: {
+          show: false
+        }
       }
     },
 
@@ -115,9 +126,12 @@
     computed: {},
 
     methods: {
-      close () {
-        this.response.showModal = false
+      chooseTemplate (template) {
+        this.templateChooser.show = false
+        this.editorJson = template
+        this.api.responseJson = JSON.stringify(template)
       },
+
       isEmpty (obj) {
         if (obj.length === 0 || obj.length === '' || obj === null) {
           return true
@@ -212,10 +226,5 @@
   .blank {
     margin-top: 10px;
     height: 30px;
-  }
-
-  .button {
-    width: 80px;
-    margin-left: 10px;
   }
 </style>
