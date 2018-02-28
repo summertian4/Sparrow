@@ -1,5 +1,8 @@
 <template>
   <div>
+    <popup-view :visible="templateChooser.show" @close="templateChooser.show=false">
+      <template-chooser @choose-template="chooseTemplate"></template-chooser>
+    </popup-view>
     <div class="tile is-ancestor">
       <article class="tile is-child box">
         <form @submit.prevent="submit">
@@ -55,7 +58,8 @@
             </p>
 
             <label class="label">返回数据</label>
-            <p class="control  has-icon has-icon-right">
+            <div class="button is-primary sparrow-button" v-on:click="templateChooser.show=true">从模板中选择</div>
+            <p class="control has-icon has-icon-right">
               <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
               <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
             </p>
@@ -75,10 +79,14 @@
   import {request} from '../network.js'
   import * as notification from '../notification.js'
   import JsonEditor from '../components/JsonEditor'
+  import PopupView from '../components/PopupView'
+  import TemplateChooser from '../components/TemplateChooser'
 
   export default {
     components: {
-      JsonEditor
+      JsonEditor,
+      PopupView,
+      TemplateChooser
     },
 
     data () {
@@ -101,7 +109,10 @@
           name: '',
           responseJson: ''
         },
-        editorJson: {}
+        editorJson: {},
+        templateChooser: {
+          show: false
+        }
       }
     },
 
@@ -112,6 +123,12 @@
     computed: {},
 
     methods: {
+      chooseTemplate (template) {
+        this.templateChooser.show = false
+        this.editorJson = template
+        this.api.responseJson = JSON.stringify(template)
+      },
+
       loadApi () {
         request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
           method: 'get'
@@ -214,11 +231,11 @@
 </script>
 
 <style scoped>
-  .button {
-    width: 80px;
-  }
-
   .right {
     float: right;
+  }
+  .sparrow-button {
+    margin-top: 10px;
+    margin-bottom: 20px;
   }
 </style>

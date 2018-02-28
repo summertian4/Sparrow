@@ -58,9 +58,7 @@
             </p>
 
             <label class="label">返回数据</label>
-            <p class="control">
-              <button class="button is-primary" v-on:click="templateChooser.show=true">从模板中选择</button>
-            </p>
+            <div class="button is-primary sparrow-button" v-on:click="templateChooser.show=true">从模板中选择</div>
             <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson"
                          v-on:verifyJson="verifyJson"></json-editor>
             <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
@@ -84,7 +82,7 @@
   import * as notification from '../notification.js'
   import JsonEditor from '../components/JsonEditor'
   import PopupView from '../components/PopupView'
-  import TemplateChooser from './TemplateChooser'
+  import TemplateChooser from '../components/TemplateChooser'
 
   export default {
     components: {
@@ -226,5 +224,10 @@
   .blank {
     margin-top: 10px;
     height: 30px;
+  }
+
+  .sparrow-button {
+    margin-top: 10px;
+    margin-bottom: 20px;
   }
 </style>
