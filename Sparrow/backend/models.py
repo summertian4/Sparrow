@@ -29,9 +29,11 @@ class Api(models.Model, Dictable):
     note = models.CharField(max_length=512, null=True, default="")
     status = models.IntegerField(default=0)
     responseJson = models.TextField(default="{}", blank=True, null=True)
+    star = models.BooleanField(default=False)
 
     createTime = models.DateTimeField(auto_now_add=True)
     updateTime = models.DateTimeField(auto_now=True)
+
 
     @unique
     class Status(Enum):

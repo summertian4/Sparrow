@@ -42,6 +42,7 @@ urlpatterns = [
     path('frontend/project/<project_id>/api/delete/<api_id>', ApiAction.delete),
     path('frontend/project/<project_id>/api/detail/<api_id>', ApiAction.detail),
     path('frontend/project/<project_id>/api/update/<api_id>', ApiAction.update),
+    path('frontend/project/<project_id>/api/star/<api_id>', ApiAction.star),
 
     path('frontend/res_template/list', ResTemplateAction.list),
     path('frontend/res_template/detail/<res_template_id>', ResTemplateAction.detail),

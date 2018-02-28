@@ -17,6 +17,9 @@
     <article class="tile is-child box">
       <h1 class="title">{{ api.path }}
         <a :href="mockLink" target="_blank">[MOCK]</a>
+        <button class="right icon" v-on:click="starAPI">
+          <i :class="{ 'fa-heart-o': !api.star, ' fa-heart': api.star }" class="fa"></i>
+        </button>
       </h1>
       <div class="block">
         <div class="control is-horizontal">
@@ -102,7 +105,8 @@
           name: '',
           status: 1,
           note: '',
-          responseJson: ''
+          responseJson: '',
+          star: false
         },
         deleteAPIModal: {
           showModal: false
@@ -167,6 +171,31 @@
 
       jumpToAPIList () {
         this.$router.push({path: '/project/detail/' + this.$route.params.project_id})
+      },
+
+      starAPI () {
+        request('/frontend/project/' + this.$route.params.project_id + '/api/star/' + this.$route.params.api_id, {
+          method: 'get'
+        }).then((data) => {
+          var message = ''
+          this.api.star = !this.api.star
+          if (this.api.star === true) {
+            message = '收藏成功'
+          } else {
+            message = '取消收藏成功'
+          }
+          notification.toast({
+            message: message,
+            type: 'success',
+            duration: 2000
+          })
+        }).catch((data) => {
+          notification.toast({
+            message: data['message'],
+            type: 'danger',
+            duration: 2000
+          })
+        })
       }
     }
   }
@@ -192,5 +221,13 @@
   .button {
     width: 80px;
     margin-left: 10px;
+  }
+
+  .icon {
+    outline: none;
+    width: 45px;
+    height: 45px;
+    border: 0px;
+    -webkit-tap-highlight-color: transparent;
   }
 </style>
