@@ -71,7 +71,7 @@ class ApiAction:
                 data['api'] = api.as_dict()
                 if 'api_id' in request.GET.keys():
                     api_id = request.GET['api_id']
-                    if (str(api.api_id) == str(api_id)) and (str(api.method) == str(method)):
+                    if (str(api.api_id) == str(api_id)):
                         data['repeatability'] = False
                     else:
                         data['repeatability'] = True
