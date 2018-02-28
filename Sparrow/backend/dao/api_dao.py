@@ -60,6 +60,7 @@ class ApiDao:
                                                                 name=model.name,
                                                                 note=model.note,
                                                                 status=model.status,
+                                                                star=model.star,
                                                                 responseJson=model.responseJson,
                                                                 updateTime=datetime.datetime.now())
         if result > 0:

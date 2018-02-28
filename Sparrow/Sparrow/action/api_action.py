@@ -132,3 +132,23 @@ class ApiAction:
         else:
             data = CommonData.response_data(RequetMethodError, "GET is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def star(request, project_id, api_id):
+        if request.method == 'GET':
+            api = ApiDao.get_api_with_id(api_id)
+            if api is not None:
+                api.star = not api.star
+                print(api.star)
+                result = ApiDao.update(api)
+                if result is False:
+                    data = CommonData.response_data(DaoOperationError, "Update API Faild")
+                    return HttpResponse(json.dumps(data), content_type="application/json")
+                else:
+                    data = CommonData.response_data(Success, "Success")
+                    return HttpResponse(json.dumps(data), content_type="application/json")
+            else:
+                data = CommonData.response_data(DaoOperationError, "API is not exist")
+                return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            data = CommonData.response_data(RequetMethodError, "GET is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
