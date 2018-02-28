@@ -8,9 +8,10 @@
             <div class="search">
               <input type="text" placeholder="请输入关键字...">
               <div class="block is-flex">
-                <collapse>
-                  <collapse-item title="Components">
-                    <form @submit.prevent="submit">
+                <collapse accordion>
+                  <collapse-item :title="template.name" v-for="template in templatesData.res_templates"
+                                 :key="template.res_template_id">
+                    <form>
                       <label class="label">模板名称</label>
                       <p class="control has-icon has-icon-right">
                         {{ template.name }}
@@ -29,30 +30,28 @@
                       </div>
                       <label class="label">备注</label>
                       <p class="control">
-                        <textarea class="textarea" v-model="template.note" disabled></textarea>
+                        {{ template.note }}
                       </p>
                       <label class="label">数据内容</label>
                       <p class="control">
-                        <json-editor ref="editor" :json="template.responseJson"/>
+                        <json-editor ref="editor" :json="JSON.parse(template.responseJson)"
+                                     :editable="false"></json-editor>
+                      </p>
+                      <p class="control">
+                        <button class="button is-primary is-fullwidth"
+                                v-on:click="chooseTemplate(template)">选择
+                        </button>
                       </p>
                     </form>
-                    <div class="block">
-                      <span class="demonstration">大于 7 页时的效果</span>
-                      <el-pagination
-                        layout="prev, pager, next"
-                        :total="1000">
-                      </el-pagination>
-                    </div>
-                  </collapse-item>
-                  <collapse-item title="Elements">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. @bulmaio. #css #responsive
                   </collapse-item>
                 </collapse>
               </div>
               <div class="block">
                 <el-pagination
                   layout="prev, pager, next"
-                  :total="50">
+                  :page-size="templatesData.limit"
+                  :total="templatesData.total"
+                  @current-change="pageChange">
                 </el-pagination>
               </div>
             </div>
@@ -70,8 +69,13 @@
   import {Collapse, Item as CollapseItem} from 'vue-bulma-collapse'
   import ElPagination from 'element-pagination'
   import 'element-theme-chalk'
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
+    props: {
+    },
+
     components: {
       JsonEditor,
       Tabs,
@@ -83,21 +87,50 @@
 
     data () {
       return {
-        template: {
-          name: '233',
-          mimeType: 0,
-          note: '233',
-          responseJson: {}
+        templatesData: {
+          total: 0,
+          current_page: 0,
+          limit: 0,
+          res_templates: []
         }
       }
     },
 
     created () {
+      this.loadTemplates(1)
     },
 
     computed: {},
 
-    methods: {}
+    methods: {
+      loadTemplates (page) {
+        request('/frontend/res_template/list', {
+          method: 'get',
+          params: {
+            current_page: page,
+            limit: 5
+          }
+        }).then((data) => {
+          this.templatesData = data['templates_data']
+        })
+          .catch((data) => {
+            notification.toast({
+              message: data['message'],
+              type: 'danger',
+              duration: 2000
+            })
+          })
+      },
+
+      chooseTemplate (template) {
+        template.responseJson = JSON.parse(template.responseJson)
+        this.$emit('choose-template', template)
+      },
+
+      pageChange (currentPage) {
+        this.loadTemplates(currentPage)
+      }
+    }
   }
 </script>
 
@@ -120,10 +153,6 @@
   .search input:focus {
     color: #555555;
     border: 1px solid #5aceb3;
-  }
-
-  .box {
-    border: 0px;
   }
 
 </style>

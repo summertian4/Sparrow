@@ -1,7 +1,7 @@
 <template>
   <div>
-    <popup-view :visible="true" @close="closeTemplateChooser">
-      <template-chooser></template-chooser>
+    <popup-view :visible="templateChooser.show" @close="templateChooser.show=false">
+      <template-chooser @choose-template="chooseTemplate"></template-chooser>
     </popup-view>
     <div class="tile is-ancestor">
       <article class="tile is-child box">
@@ -58,7 +58,11 @@
             </p>
 
             <label class="label">返回数据</label>
-            <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson" v-on:verifyJson="verifyJson"/>
+            <p class="control">
+              <button class="button is-primary" v-on:click="templateChooser.show=true">从模板中选择</button>
+            </p>
+            <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson"
+                         v-on:verifyJson="verifyJson"></json-editor>
             <span class="help is-danger" v-if="!verifications.responseJson">{{ errorMessage.responseJson }}</span>
             <div>
               <p class="control right">
@@ -109,7 +113,10 @@
           name: '',
           responseJson: ''
         },
-        editorJson: {}
+        editorJson: {},
+        templateChooser: {
+          show: false
+        }
       }
     },
 
@@ -119,8 +126,10 @@
     computed: {},
 
     methods: {
-      closeTemplateChooser () {
-
+      chooseTemplate (template) {
+        this.templateChooser.show = false
+        this.editorJson = template
+        this.api.responseJson = JSON.stringify(template)
       },
 
       isEmpty (obj) {
@@ -217,10 +226,5 @@
   .blank {
     margin-top: 10px;
     height: 30px;
-  }
-
-  .button {
-    width: 80px;
-    margin-left: 10px;
   }
 </style>
