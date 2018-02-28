@@ -53,11 +53,6 @@ export default new Router({
       path: '/template/update/:id',
       component: require('../views/template/update')
     },
-    {
-      name: 'Login',
-      path: '/login',
-      component: require('../views/auth/Login')
-    },
     ...generateRoutesFromMenu(menuModule.state.items),
     {
       path: '*',
