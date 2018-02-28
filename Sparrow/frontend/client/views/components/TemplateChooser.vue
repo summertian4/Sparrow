@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import JsonEditor from '../components/JsonEditor'
+  import JsonEditor from './JsonEditor'
   import {Tabs, TabPane} from 'vue-bulma-tabs'
   import {Collapse, Item as CollapseItem} from 'vue-bulma-collapse'
   import ElPagination from 'element-pagination'
