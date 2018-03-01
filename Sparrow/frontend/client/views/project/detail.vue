@@ -9,8 +9,15 @@
               <button class="button is-primary">添加 </button>
             </router-link>
           </div>
-
-          <api-list :apis="apis"></api-list>
+          <api-list :apis="apisData.apis"></api-list>
+          <div class="block">
+            <el-pagination
+              layout="prev, pager, next"
+              :page-size="apisData.limit"
+              :total="apisData.total"
+              @current-change="pageChange">
+            </el-pagination>
+          </div>
         </tab-pane>
         <tab-pane label="项目设置">
           <project-setting :project="project"></project-setting>
@@ -26,19 +33,21 @@
   import {request} from '../network.js'
   import * as notification from '../notification.js'
   import ApiList from '../components/APIList'
+  import ElPagination from 'element-pagination'
 
   export default {
     components: {
       Tabs,
       TabPane,
       ApiList,
-      ProjectSetting
+      ProjectSetting,
+      ElPagination
     },
 
     data () {
       return {
         project: '',
-        apis: []
+        apisData: {}
       }
     },
 
@@ -50,10 +59,15 @@
     computed: {},
 
     methods: {
-      loadApis () {
-        request('/frontend/project/' + this.$route.params.id + '/api/list')
+      loadApis (page) {
+        request('/frontend/project/' + this.$route.params.id + '/api/list', {
+          params: {
+            current_page: page,
+            limit: 10
+          }
+        })
           .then((data) => {
-            this.apis = data['apis']
+            this.apisData = data['apis_data']
           })
           .catch((data) => {
             notification.toast({
@@ -62,6 +76,10 @@
               duration: 2000
             })
           })
+      },
+
+      pageChange (currentPage) {
+        this.loadApis(currentPage)
       },
 
       loadProjects () {

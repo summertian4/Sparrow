@@ -14,7 +14,16 @@ Success = 200
 
 class ApiAction:
     def list(request, project_id):
-        apis = ProjectDao.get_project_with_id(project_id).apis.order_by('-createTime')
+        limit = 10
+        page = 1
+        if 'limit' in request.GET.keys():
+            limit = int(request.GET['limit'])
+        if 'current_page' in request.GET.keys():
+            page = int(request.GET['current_page'])
+
+        offset = (page - 1) * limit
+
+        apis = ApiDao.get_apis_with_project_id(project_id, offset, limit)
         apis_dict = []
         for api in apis:
             api_dic = api.as_dict()
@@ -22,8 +31,14 @@ class ApiAction:
             if project_dic is not None:
                 api_dic['project'] = project_dic
             apis_dict.append(api_dic)
+
+        count = ApiDao.get_apis_count_with_project_id(project_id)
         data = CommonData.response_data(Success, "API create faild")
-        data['apis'] = apis_dict
+
+        data["apis_data"] = {"apis": apis_dict,
+                             "current_page": page,
+                             "total": count,
+                             "limit": limit}
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
@@ -60,7 +75,7 @@ class ApiAction:
     def repeat_name_verification(request, project_id):
         if request.method == 'GET':
             if ('path' not in request.GET.keys()) or \
-                ('method' not in request.GET.keys()):
+                    ('method' not in request.GET.keys()):
                 data = CommonData.response_data(MissingParametersError, "缺少参数")
                 return HttpResponse(json.dumps(data), content_type="application/json")
             path = request.GET['path']

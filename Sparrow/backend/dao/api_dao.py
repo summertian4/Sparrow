@@ -33,9 +33,13 @@ class ApiDao:
         api = Api.objects.get(api_id=api_id)
         return api
 
-    def get_apis_with_project_id(project_id):
-        apis = Api.objects.filter(project__project_id=project_id)
+    def get_apis_with_project_id(project_id, offset, limit):
+        apis = Api.objects.filter(project__project_id=project_id).order_by('-createTime')[offset: offset + limit]
         return apis
+
+    def get_apis_count_with_project_id(project_id):
+        result = Api.objects.all().filter(project__project_id=project_id).count()
+        return result
 
     def get_apis_with_project_id_and_path(project_id, path):
         apis = Api.objects.filter(project__project_id=project_id, path=path)
