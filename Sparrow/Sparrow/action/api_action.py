@@ -17,7 +17,11 @@ class ApiAction:
         apis = ProjectDao.get_project_with_id(project_id).apis.order_by('-createTime')
         apis_dict = []
         for api in apis:
-            apis_dict.append(api.as_dict())
+            api_dic = api.as_dict()
+            project_dic = ProjectDao.get_project_with_api_id(api.api_id)
+            if project_dic is not None:
+                api_dic['project'] = project_dic
+            apis_dict.append(api_dic)
         data = CommonData.response_data(Success, "API create faild")
         data['apis'] = apis_dict
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
