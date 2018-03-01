@@ -3,83 +3,8 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <h4 class="title">API</h4>
-          <table class="table">
-            <thead>
-            <tr>
-              <th>请求类型</th>
-              <th>请求名称</th>
-              <th>请求 URL</th>
-              <th>操作</th>
-            </tr>
-            </thead>
-            <tfoot>
-            <tr>
-              <th>请求类型</th>
-              <th>请求名称</th>
-              <th>请求 URL</th>
-              <th>操作</th>
-            </tr>
-            </tfoot>
-            <tbody>
-            <tr>
-              <td>
-                <a class="button green is-active">POST</a>
-              </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a class="button blue is-active">GET</a>
-              </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a class="button yellow is-active">PUT</a>
-              </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a class="button red is-active">DELETE</a>
-              </td>
-              <td>login</td>
-              <td class="is-icon">
-                登录
-              </td>
-              <td class="is-icon">
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <h4 class="title">收藏 API 列表</h4>
+          <api-list :apis="apis"></api-list>
         </article>
       </div>
     </div>
@@ -88,48 +13,45 @@
 
 <script>
   import Chart from 'vue-bulma-chartjs'
+  import ApiList from '../components/APIList'
+  import {request} from '../network.js'
+  import * as notification from '../notification.js'
 
   export default {
     components: {
-      Chart
+      Chart,
+      ApiList
     },
 
     data () {
-      return {}
+      return {
+        apis: []
+      }
+    },
+
+    created () {
+      this.loadFavoriteApis()
     },
 
     computed: {},
 
-    methods: {}
+    methods: {
+      loadFavoriteApis () {
+        request('/frontend/favorite/list')
+          .then((data) => {
+            this.apis = data['apis']
+          })
+          .catch((data) => {
+            notification.toast({
+              message: data['message'],
+              type: 'danger',
+              duration: 2000
+            })
+          })
+      }
+    }
   }
 </script>
 
 <style scoped>
-  .button {
-    width: 80px;
-  }
-
-  .green {
-    background-color: #5eceb3;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .blue {
-    background-color: #4373d5;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .yellow {
-    background-color: #fadd6e;
-    border-color: transparent;
-    color: #fff;
-  }
-
-  .red {
-    background-color: #eb4c64;
-    border-color: transparent;
-    color: #fff;
-  }
 </style>

@@ -1,6 +1,7 @@
 from backend.models import Project
 import datetime
 
+
 class ProjectDao:
     def get_all_projects():
         projects = Project.objects.all().order_by('-createTime')
@@ -8,16 +9,29 @@ class ProjectDao:
 
     def get_all_project_list():
         projects = list(ProjectDao.get_all_projects().values('project_id',
-                                                            'name',
-                                                            'note',
-                                                            'status',
-                                                            'createTime',
-                                                            'updateTime'))
+                                                             'name',
+                                                             'note',
+                                                             'status',
+                                                             'createTime',
+                                                             'updateTime'))
         return projects
 
     def get_project_with_id(project_id):
         try:
             project = Project.objects.get(project_id=project_id)
+            return project
+        except:
+            return None
+
+    def get_project_with_api_id(api_id):
+        # 返回是 dict
+        try:
+            project = Project.objects.filter(apis__api_id=api_id).values('project_id',
+                                                                      'name',
+                                                                      'note',
+                                                                      'status',
+                                                                      'createTime',
+                                                                      'updateTime').first()
             return project
         except:
             return None

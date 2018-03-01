@@ -60,7 +60,6 @@ class ApiAction:
                 data = CommonData.response_data(MissingParametersError, "缺少参数")
                 return HttpResponse(json.dumps(data), content_type="application/json")
             path = request.GET['path']
-            method = request.GET['method']
             if path is None:
                 return
             api = ApiDao.get_apis_with_project_id_and_path(project_id, path).first()
@@ -149,6 +148,32 @@ class ApiAction:
             else:
                 data = CommonData.response_data(DaoOperationError, "API is not exist")
                 return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            data = CommonData.response_data(RequetMethodError, "GET is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def starList(request):
+        limit = 10
+        page = 1
+        if 'limit' in request.GET.keys():
+            limit = int(request.GET['limit'])
+        if 'current_page' in request.GET.keys():
+            page = int(request.GET['current_page'])
+
+        offset = (page - 1) * limit
+
+        if request.method == 'GET':
+            apis = ApiDao.get_all_star_apis(offset, limit)
+            apis_dict = []
+            for api in apis:
+                api_dic = api.as_dict()
+                project_dic = ProjectDao.get_project_with_api_id(api.api_id)
+                if project_dic is not None:
+                    api_dic['project'] = project_dic
+                apis_dict.append(api_dic)
+            data = CommonData.response_data(Success, "Success")
+            data['apis'] = apis_dict
+            return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "GET is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")

@@ -25,6 +25,10 @@ class ApiDao:
                                                  'responseJson'))
         return apis
 
+    def get_all_star_apis(offset, limit):
+        apis = Api.objects.filter(star__exact=True).order_by('-createTime')[offset: offset + limit]
+        return apis
+
     def get_api_with_id(api_id):
         api = Api.objects.get(api_id=api_id)
         return api
