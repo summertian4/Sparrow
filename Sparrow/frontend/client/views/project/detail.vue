@@ -10,7 +10,7 @@
             </router-link>
           </div>
           <api-list :apis="apisData.apis"></api-list>
-          <div class="block">
+          <div class="block right">
             <el-pagination
               layout="prev, pager, next"
               :page-size="apisData.limit"
@@ -53,7 +53,7 @@
 
     created () {
       this.loadProjects()
-      this.loadApis()
+      this.loadApis(1)
     },
 
     computed: {},
