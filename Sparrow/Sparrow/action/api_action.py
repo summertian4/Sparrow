@@ -182,7 +182,7 @@ class ApiAction:
         offset = (page - 1) * limit
 
         if request.method == 'GET':
-            apis = ApiDao.get_all_star_apis(offset, limit)
+            apis = ApiDao.get_all_stared_apis(offset, limit)
             apis_dict = []
             for api in apis:
                 api_dic = api.as_dict()
@@ -190,8 +190,12 @@ class ApiAction:
                 if project_dic is not None:
                     api_dic['project'] = project_dic
                 apis_dict.append(api_dic)
+            count = ApiDao.get_stared_apis_count()
             data = CommonData.response_data(Success, "Success")
-            data['apis'] = apis_dict
+            data["apis_data"] = {"apis": apis_dict,
+                                 "current_page": page,
+                                 "total": count,
+                                 "limit": limit}
             return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
         else:
             data = CommonData.response_data(RequetMethodError, "GET is invalid")
