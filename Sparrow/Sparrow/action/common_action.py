@@ -7,6 +7,8 @@ import json
 from enum import Enum, unique
 import datetime
 
+APINotExist = 1000
+
 def datetime2string(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
@@ -44,5 +46,9 @@ def error(request):
 def mock(request, project_id, path):
     method = str(request.method)
     api = ApiDao.get_api(path, method)
-    response_data = json.loads(api.responseJson)
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    data = CommonData.response_data(APINotExist, "该 Method 的 API 不存在")
+    print(api)
+    if api is not None:
+        data = json.loads(api.responseJson)
+    return HttpResponse(json.dumps(data), content_type="application/json")
