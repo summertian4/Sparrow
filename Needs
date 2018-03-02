@@ -1,4 +1,4 @@
-brew install httpie
+pip3 install django-cors-headers
 
 sudo python get-pip.py
 
@@ -10,4 +10,11 @@ python3 manage.py runserver
 
 pip3 install django-cors-headers
 
+npm install vue
+
+npm install --global vue-cli
+
+npm install -g node-gyp
+
 npm install -s vue-resource
+
