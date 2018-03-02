@@ -18,9 +18,28 @@ Success = 200
 
 class ProjectAction:
     def list(request):
-        project_list = ProjectDao.get_all_project_list()
+        if request.method != CommonData.Method.GET.value:
+            data = CommonData.response_data(RequetMethodError, "Method is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        limit = 10
+        page = 1
+        if 'limit' in request.GET.keys():
+            limit = int(request.GET['limit'])
+        if 'current_page' in request.GET.keys():
+            page = int(request.GET['current_page'])
+
+        offset = (page - 1) * limit
+
+        project_list = ProjectDao.get_all_project_list(offset, limit)
         data = CommonData.response_data(Success, "Success")
-        data["projects"] = project_list
+
+        count = ProjectDao.get_all_projects_count()
+        data["projects_data"] = {"projects": project_list,
+                                  "current_page": page,
+                                  "total": count,
+                                  "limit": limit}
+
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     def detail(request, project_id):

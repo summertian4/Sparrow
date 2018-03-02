@@ -3,18 +3,22 @@ import datetime
 
 
 class ProjectDao:
-    def get_all_projects():
-        projects = Project.objects.all().order_by('-createTime')
+    def get_all_projects(offset, limit):
+        projects = Project.objects.all().order_by('-updateTime')[offset: offset + limit]
         return projects
 
-    def get_all_project_list():
-        projects = list(ProjectDao.get_all_projects().values('project_id',
+    def get_all_project_list(offset, limit):
+        projects = list(ProjectDao.get_all_projects(offset, limit).values('project_id',
                                                              'name',
                                                              'note',
                                                              'status',
                                                              'createTime',
                                                              'updateTime'))
         return projects
+
+    def get_all_projects_count():
+        result = Project.objects.all().values('project_id').count()
+        return result
 
     def get_project_with_id(project_id):
         try:
