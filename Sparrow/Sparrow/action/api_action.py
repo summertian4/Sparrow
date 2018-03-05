@@ -11,7 +11,6 @@ RequetMethodError = 1003
 MissingParametersError = 1004
 Success = 200
 
-
 class ApiAction:
     def list(request, project_id):
         if request.method != CommonData.Method.GET.value:
@@ -208,3 +207,27 @@ class ApiAction:
                              "total": count,
                              "limit": limit}
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
+
+    def update_status(request, project_id, api_id):
+        if request.method != CommonData.Method.GET.value:
+            data = CommonData.response_data(RequetMethodError, "Method is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if ('status' not in request.GET.keys()):
+            data = CommonData.response_data(MissingParametersError, "缺少参数")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        status = request.GET['status']
+        api = ApiDao.get_api_with_id(api_id)
+        if api is not None:
+            api.status = status
+            result = ApiDao.update(api)
+            if result is False:
+                data = CommonData.response_data(DaoOperationError, "Update API Faild")
+                return HttpResponse(json.dumps(data), content_type="application/json")
+            else:
+                data = CommonData.response_data(Success, "Success")
+                return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            data = CommonData.response_data(DaoOperationError, "API is not exist")
+            return HttpResponse(json.dumps(data), content_type="application/json")

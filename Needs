@@ -1,5 +1,3 @@
-pip3 install django-cors-headers
-
 sudo python get-pip.py
 
 brew install python3

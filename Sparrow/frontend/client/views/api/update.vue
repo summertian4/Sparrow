@@ -37,7 +37,7 @@
               </span>
               <span class="help is-danger" v-if="!verifications.name">{{ errorMessage.name }}</span>
             </p>
-            <label class="label">是否启用</label>
+            <label class="label">开启Mock</label>
             <p class="control">
               <span class="select">
                 <select v-model.trim="api.status">
@@ -50,11 +50,6 @@
             <label class="label">备注</label>
             <p class="control">
               <textarea class="textarea" placeholder="请输入您的备注" v-model.trim="api.note"></textarea>
-            </p>
-
-            <label class="label">请求参数</label>
-            <p class="control">
-              <textarea class="textarea" placeholder=""></textarea>
             </p>
 
             <label class="label">返回数据</label>
