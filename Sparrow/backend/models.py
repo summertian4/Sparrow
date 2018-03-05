@@ -38,7 +38,9 @@ class Api(models.Model, Dictable):
     @unique
     class Status(Enum):
         Disabled = 0
-        Abled = 1
+        Mock = 1
+        # 使用其他环境
+        UseOther = 2
 
 class ResTemplate(models.Model, Dictable):
     res_template_id = models.AutoField(primary_key=True)

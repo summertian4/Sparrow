@@ -52,11 +52,6 @@
               <textarea class="textarea" placeholder="请输入您的备注" v-model.trim="api.note"></textarea>
             </p>
 
-            <label class="label">请求参数</label>
-            <p class="control">
-              <textarea class="textarea" placeholder=""></textarea>
-            </p>
-
             <label class="label">返回数据</label>
             <div class="button is-primary sparrow-button" v-on:click="templateChooser.show=true">从模板中选择</div>
             <json-editor ref="editor" :onChange="inputResponseJson" :json="editorJson"

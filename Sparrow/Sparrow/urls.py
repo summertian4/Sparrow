@@ -43,6 +43,8 @@ urlpatterns = [
     path('frontend/project/<project_id>/api/detail/<api_id>', ApiAction.detail),
     path('frontend/project/<project_id>/api/update/<api_id>', ApiAction.update),
     path('frontend/project/<project_id>/api/star/<api_id>', ApiAction.star),
+    path('frontend/project/<project_id>/api/<api_id>/update_status', ApiAction.update_status),
+
 
     path('frontend/favorite/list', ApiAction.starList),
 

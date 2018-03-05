@@ -40,10 +40,10 @@
         </div>
         <div class="control is-horizontal">
           <div class="control-label">
-            <label class="label">是否启用</label>
+            <label class="label">开启Mock</label>
           </div>
           <div class="control">
-            {{ api.status }}
+            <vb-switch type="primary" size="medium" v-model="mockStatus"></vb-switch>
           </div>
         </div>
         <div class="control is-horizontal">
@@ -90,11 +90,13 @@
   import * as notification from '../notification.js'
   import JsonEditor from '../components/JsonEditor'
   import {Modal} from 'vue-bulma-modal'
+  import VbSwitch from 'vue-bulma-switch'
 
   export default {
     components: {
       JsonEditor,
-      Modal
+      Modal,
+      VbSwitch
     },
 
     data () {
@@ -110,7 +112,9 @@
         },
         deleteAPIModal: {
           showModal: false
-        }
+        },
+        mockStatus: true,
+        shouldRequestUpdateStatus: false
       }
     },
 
@@ -124,10 +128,47 @@
       }
     },
 
+    watch: {
+      mockStatus: function (val) {
+        if (val === true) {
+          this.api.status = 1
+        } else {
+          this.api.status = 0
+        }
+        if (this.shouldRequestUpdateStatus === false) {
+          this.shouldRequestUpdateStatus = true
+        } else {
+          this.updateStatus(this.api.status)
+        }
+      }
+    },
+
     methods: {
       close () {
         this.deleteAPIModal.showModal = false
       },
+
+      updateStatus (status) {
+        request('/frontend/project/' + this.$route.params.project_id + '/api/' + this.$route.params.api_id + '/update_status', {
+          method: 'get',
+          params: {
+            status: status
+          }
+        }).then((data) => {
+          notification.toast({
+            message: '更新 API 成功',
+            type: 'success',
+            duration: 2000
+          })
+        }).catch((data) => {
+          notification.toast({
+            message: data['message'],
+            type: 'danger',
+            duration: 2000
+          })
+        })
+      },
+
       loadApi () {
         request('/frontend/project/' + this.$route.params.project_id + '/api/detail/' + this.$route.params.api_id, {
           method: 'get',
@@ -136,6 +177,7 @@
           }
         }).then((data) => {
           this.api = data['api']
+          this.mockStatus = this.api.status === 1
         }).catch((data) => {
           notification.toast({
             message: data['message'],
