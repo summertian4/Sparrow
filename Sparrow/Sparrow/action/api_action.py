@@ -36,12 +36,33 @@ class ApiAction:
             apis_dict.append(api_dic)
 
         count = ApiDao.get_apis_count_with_project_id(project_id)
-        data = CommonData.response_data(Success, "API create faild")
+        data = CommonData.response_data(Success, "Success")
 
         data["apis_data"] = {"apis": apis_dict,
                              "current_page": page,
                              "total": count,
                              "limit": limit}
+        return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
+
+    def fetch(request):
+        if request.method != CommonData.Method.GET.value:
+            data = CommonData.response_data(RequetMethodError, "Method is invalid")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if 'project_id' not in request.GET.keys():
+            data = CommonData.response_data(MissingParametersError, "Missing Parameters")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        project_ids = request.GET.getlist('project_id')
+
+        apis = []
+        for project_id in project_ids:
+            aList = list(ApiDao.get_all_apis_with_project_id(project_id))
+            print(ApiDao.get_all_apis_with_project_id(project_id))
+            apis = apis + aList
+
+        data = CommonData.response_data(Success, "Success")
+        data['apis'] = apis
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
