@@ -1,6 +1,7 @@
 from backend.models import Api
 import datetime
 
+
 class ApiDao:
     def create(model):
         api = Api.objects.create(path=model.path,
@@ -39,6 +40,16 @@ class ApiDao:
 
     def get_apis_with_project_id(project_id, offset, limit):
         apis = Api.objects.filter(project__project_id=project_id).order_by('-createTime')[offset: offset + limit]
+        return apis
+
+    def get_all_apis_with_project_id(project_id):
+        apis = Api.objects.filter(project__project_id=project_id).order_by('-createTime').values('api_id',
+                                                                                                 'path',
+                                                                                                 'method',
+                                                                                                 'name',
+                                                                                                 'note',
+                                                                                                 'status',
+                                                                                                 'responseJson')
         return apis
 
     def get_apis_count_with_project_id(project_id):
