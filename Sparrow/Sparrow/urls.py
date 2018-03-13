@@ -33,9 +33,8 @@ urlpatterns = [
     path('frontend/project/repeat_name_verification', ProjectAction.repeat_name_verification),
     path('frontend/project/delete', ProjectAction.delete),
 
-    path('api/fetch', ApiAction.fetch),
-    path('api/update/<api_id>', ApiAction.update),
     path('mock/<project_id>/<path:path>', action.common_action.mock),
+    path('frontend/api/fetch', ApiAction.fetch),
     path('frontend/project/<project_id>/api/create', ApiAction.create),
     path('frontend/project/<project_id>/api/list', ApiAction.list),
     path('frontend/project/<project_id>/api/repeat_name_verification', ApiAction.repeat_name_verification),

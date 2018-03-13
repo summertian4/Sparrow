@@ -52,7 +52,7 @@ def mock(request, project_id, path):
     if api is None:
         data = CommonData.response_data(APINotExist, "该 Method 的 API 不存在")
         return HttpResponse(json.dumps(data), content_type="application/json")
-    if api.status != Api.Status.Mock:
+    if api.status != Api.Status.Mock.value:
         data = CommonData.response_data(APINotOpenMock, "该 API 没有开启 Mock")
         return HttpResponse(json.dumps(data), content_type="application/json")
 

@@ -49,11 +49,11 @@ class ApiAction:
             data = CommonData.response_data(RequetMethodError, "Method is invalid")
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-        if 'project_id' not in request.GET.keys():
+        if 'project_id[]' not in request.GET.keys():
             data = CommonData.response_data(MissingParametersError, "Missing Parameters")
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-        project_ids = request.GET.getlist('project_id')
+        project_ids = request.GET.getlist('project_id[]')
 
         apis = []
         for project_id in project_ids:
