@@ -55,14 +55,15 @@ class ApiAction:
 
         project_ids = request.GET.getlist('project_id[]')
 
-        apis = []
+        apis_dics = []
         for project_id in project_ids:
             aList = list(ApiDao.get_all_apis_with_project_id(project_id))
-            print(ApiDao.get_all_apis_with_project_id(project_id))
-            apis = apis + aList
+            for api in aList:
+                api['project_id'] = int(project_id)
+                apis_dics.append(api)
 
         data = CommonData.response_data(Success, "Success")
-        data['apis'] = apis
+        data['apis'] = apis_dics
         return HttpResponse(json.dumps(data, default=datetime2string), content_type="application/json")
 
     @csrf_exempt
