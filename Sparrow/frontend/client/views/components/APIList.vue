@@ -10,7 +10,7 @@
                 <br/>
                 如果您确定删除，请输入该项目的名称，防止误删除
               </p>
-              <button class="button is-danger long" @click="deleteApi">确认删除</button>
+              <button class="button is-danger long" @click="deleteApi(currentApi)">确认删除</button>
             </div>
           </div>
         </article>
@@ -126,7 +126,7 @@
         this.deleteModal.showModal = true
         this.currentApi = api
       },
-      deleteApi () {
+      deleteApi (api) {
         request('/frontend/project/' + this.currentApi.project.project_id + '/api/delete/' + this.currentApi.api_id)
           .then((data) => {
             this.deleteModal.showModal = false
@@ -135,7 +135,7 @@
               type: 'success',
               duration: 2000
             })
-            this.loadApis(this.project.project_id)
+            this.apis.pop(api)
           })
           .catch((data) => {
             notification.toast({

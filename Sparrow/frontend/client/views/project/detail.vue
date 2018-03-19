@@ -47,22 +47,23 @@
     data () {
       return {
         project: '',
+        currentPage: 1,
         apisData: {}
       }
     },
 
     created () {
       this.loadProjects()
-      this.loadApis(1)
+      this.loadApis()
     },
 
     computed: {},
 
     methods: {
-      loadApis (page) {
+      loadApis () {
         request('/frontend/project/' + this.$route.params.id + '/api/list', {
           params: {
-            current_page: page,
+            current_page: this.currentPage,
             limit: 10
           }
         })
@@ -79,7 +80,8 @@
       },
 
       pageChange (currentPage) {
-        this.loadApis(currentPage)
+        this.currentPage = currentPage
+        this.loadApis()
       },
 
       loadProjects () {
