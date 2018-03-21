@@ -152,7 +152,8 @@
         request('/frontend/project/repeat_name_verification', {
           method: 'get',
           params: {
-            name: this.project.name
+            name: this.project.name,
+            project_id: this.project.project_id
           }
         }).then((data) => {
           var repeatability = data['repeatability']
