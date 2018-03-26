@@ -77,6 +77,8 @@ class ApiAction:
         if form.is_valid():
             model = Api()
             model.path = form.clean().get('path')
+            if model.path.startswith('/', ):
+                model.path = model.path[1:]
             model.method = form.clean().get('method')
             model.name = form.clean().get('name')
             model.note = form.clean().get('note')
@@ -150,6 +152,8 @@ class ApiAction:
         if form.is_valid():
             model = ApiDao.get_api_with_id(api_id)
             model.path = form.clean().get('path')
+            if model.path.startswith('/', ):
+                model.path = model.path[1:]
             model.method = form.clean().get('method')
             model.name = form.clean().get('name')
             model.note = form.clean().get('note')
