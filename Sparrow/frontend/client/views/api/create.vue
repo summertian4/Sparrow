@@ -11,7 +11,7 @@
             <label class="label">请求路径</label>
             <p class="control has-icon has-icon-right">
               <input v-bind:class="{ 'is-danger': !verifications.path }" class="input" type="text"
-                     placeholder="输入您的 API 相对路径" v-model.trim="api.path" v-on:input="verifications.path=true">
+                     placeholder="输入您的 API 相对路径，不需要 / 开头" v-model.trim="api.path" v-on:input="inputingApiPath">
               <span class="icon is-small" v-if="!verifications.path">
                <i class="fa fa-warning"></i>
               </span>
@@ -116,9 +116,18 @@
     created () {
     },
 
+    watch: {},
+
     computed: {},
 
     methods: {
+      inputingApiPath () {
+        this.verifications.path = true
+        if (this.api.path.indexOf('/', 0) === 0) {
+          this.api.path = this.api.path.substring(1, this.api.path.length)
+        }
+      },
+
       chooseTemplate (template) {
         this.templateChooser.show = false
         this.editorJson = template
