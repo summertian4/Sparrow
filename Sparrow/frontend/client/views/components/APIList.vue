@@ -65,7 +65,14 @@
             <td>
               {{ api.path }}
             </td>
-            <td>{{ api.status }}</td>
+            <td>
+              <div class="button is-primary is-active" v-if="api.status == 1">
+                Mock 中
+              </div>
+              <div class="button is-active" v-if="api.status != 1">
+                Mock 关闭
+              </div>
+            </td>
             <td class="is-icon">
               <p class="control has-addons">
                 <a class="button" @click="jumpToAPIUpdate(api)">
