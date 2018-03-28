@@ -1,9 +1,9 @@
 from django.forms.models import model_to_dict
 import json
-from backend.dao.res_template_dao import ResTemplateDao
+from dal.dao.res_template_dao import ResTemplateDao
 from Sparrow.action.common_action import *
 from Sparrow.forms import *
-from backend.models import ResTemplate
+from dal.models import ResTemplate
 
 FormParseError = 1001
 DaoOperationError = 1002

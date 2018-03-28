@@ -20,7 +20,6 @@
             </p>
             <p class="control">
               <button class="button is-primary right" type="submit">确认</button>
-              <button class="button is-link right">取消</button>
             </p>
           </div>
         </form>

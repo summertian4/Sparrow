@@ -1,12 +1,12 @@
 from django.http import HttpResponse
 from django.forms.models import model_to_dict
 import json
-from backend.dao.project_dao import ProjectDao
+from dal.dao.project_dao import ProjectDao
 from django.views.decorators.csrf import csrf_exempt
 from Sparrow.action.common_action import CommonData
 from Sparrow.action.common_action import *
 from Sparrow.forms import *
-from backend.models import Project
+from dal.models import Project
 
 FormParseError = 1001
 DaoOperationError = 1002

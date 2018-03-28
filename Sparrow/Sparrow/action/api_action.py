@@ -1,7 +1,7 @@
-from backend.dao.api_dao import ApiDao
-from backend.dao.project_dao import ProjectDao
+from dal.dao.api_dao import ApiDao
+from dal.dao.project_dao import ProjectDao
 from Sparrow.forms import *
-from backend.models import Api
+from dal.models import Api
 from Sparrow.action.common_action import *
 from django.forms.models import model_to_dict
 
