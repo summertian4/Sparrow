@@ -1,4 +1,4 @@
-from backend.models import Project
+from dal.models import Project
 import datetime
 
 

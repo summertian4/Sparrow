@@ -1,12 +1,12 @@
 from django.views.decorators.csrf import csrf_exempt
-from backend.dao.api_dao import ApiDao
+from dal.dao.api_dao import ApiDao
 import Sparrow._const
 from django.shortcuts import render
 from django.http import HttpResponse
 import json
 from enum import Enum, unique
 import datetime
-from backend.models import Api
+from dal.models import Api
 
 APINotExist = 1000
 APINotOpenMock = 1005

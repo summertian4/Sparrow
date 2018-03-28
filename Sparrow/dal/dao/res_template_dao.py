@@ -1,4 +1,4 @@
-from backend.models import ResTemplate
+from dal.models import ResTemplate
 import datetime
 
 
